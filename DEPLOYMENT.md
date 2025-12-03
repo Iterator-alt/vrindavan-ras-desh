@@ -180,6 +180,17 @@ npx prisma db seed
 4. Go to `/admin/settings` and try updating the hero image or videos
 5. Go back to the home page and see the changes!
 
+## Step 8: Configure Vercel Blob (Image Uploads)
+
+To enable image uploads, you need to set up Vercel Blob storage:
+
+1.  Go to your Vercel Project Dashboard.
+2.  Click on the **Storage** tab.
+3.  Click **Connect Store** and select **Blob**.
+4.  Follow the steps to create a new Blob store.
+5.  The `BLOB_READ_WRITE_TOKEN` will be automatically added to your environment variables.
+6.  **Redeploy** your application for the changes to take effect.
+
 ## Future Updates
 
 Whenever you make changes to your code:

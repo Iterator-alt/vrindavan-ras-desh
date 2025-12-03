@@ -1,13 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { extractYouTubeId } from '@/lib/utils';
 
 export default function SettingsPage() {
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   // Redirect if not authenticated
@@ -45,7 +48,46 @@ export default function SettingsPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+    
+    // Auto-convert YouTube links
+    if (name.startsWith('videoUrl') && value) {
+      const embedUrl = extractYouTubeId(value);
+      if (embedUrl) {
+        setFormData(prev => ({ ...prev, [name]: embedUrl }));
+        return;
+      }
+    }
+
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files?.[0]) return;
+
+    setUploading(true);
+    const file = e.target.files[0];
+
+    try {
+      const response = await fetch(
+        `/api/upload?filename=${encodeURIComponent(file.name)}`,
+        {
+          method: 'POST',
+          body: file,
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const newBlob = await response.json();
+      setFormData(prev => ({ ...prev, heroImageUrl: newBlob.url }));
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      alert('Failed to upload image. Please try again.');
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -87,24 +129,61 @@ export default function SettingsPage() {
           <textarea name="heroSubtitle" value={formData.heroSubtitle || ''} onChange={handleChange} rows={3} style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
         </div>
         <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Background Image URL</label>
-          <input type="text" name="heroImageUrl" value={formData.heroImageUrl || ''} onChange={handleChange} placeholder="https://..." style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
-          <p style={{ fontSize: '0.8rem', color: '#888', marginTop: '5px' }}>Paste a direct link to an image (e.g., from Unsplash or Cloudinary).</p>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Background Image</label>
+          <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+            <input 
+              type="text" 
+              name="heroImageUrl" 
+              value={formData.heroImageUrl || ''} 
+              onChange={handleChange} 
+              placeholder="https://..." 
+              style={{ flex: 1, padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} 
+            />
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileUpload}
+              accept="image/*"
+              style={{ display: 'none' }}
+            />
+            <button 
+              type="button" 
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+              style={{ 
+                padding: '10px 20px', 
+                background: '#eee', 
+                border: '1px solid #ddd', 
+                borderRadius: '5px',
+                cursor: uploading ? 'wait' : 'pointer'
+              }}
+            >
+              {uploading ? 'Uploading...' : 'Upload'}
+            </button>
+          </div>
+          {formData.heroImageUrl && (
+            <div style={{ marginTop: '10px', width: '100%', height: '200px', overflow: 'hidden', borderRadius: '5px', border: '1px solid #ddd' }}>
+              <img src={formData.heroImageUrl} alt="Hero Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+          )}
+          <p style={{ fontSize: '0.8rem', color: '#888', marginTop: '5px' }}>Paste a direct link or upload an image.</p>
         </div>
 
         {/* Videos */}
         <h3 style={{ borderBottom: '1px solid #eee', paddingBottom: '10px', marginBottom: '20px', marginTop: '40px' }}>Featured Videos</h3>
+        <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '15px' }}>Paste any YouTube link (e.g., https://www.youtube.com/watch?v=...) and it will be automatically converted.</p>
+        
         <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Video 1 (Embed URL)</label>
-          <input type="text" name="videoUrl1" value={formData.videoUrl1 || ''} onChange={handleChange} placeholder="https://www.youtube.com/embed/..." style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Video 1</label>
+          <input type="text" name="videoUrl1" value={formData.videoUrl1 || ''} onChange={handleChange} placeholder="Paste YouTube Link" style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
         </div>
         <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Video 2 (Embed URL)</label>
-          <input type="text" name="videoUrl2" value={formData.videoUrl2 || ''} onChange={handleChange} placeholder="https://www.youtube.com/embed/..." style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Video 2</label>
+          <input type="text" name="videoUrl2" value={formData.videoUrl2 || ''} onChange={handleChange} placeholder="Paste YouTube Link" style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
         </div>
         <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Video 3 (Embed URL)</label>
-          <input type="text" name="videoUrl3" value={formData.videoUrl3 || ''} onChange={handleChange} placeholder="https://www.youtube.com/embed/..." style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Video 3</label>
+          <input type="text" name="videoUrl3" value={formData.videoUrl3 || ''} onChange={handleChange} placeholder="Paste YouTube Link" style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
         </div>
 
         {/* Contact */}
