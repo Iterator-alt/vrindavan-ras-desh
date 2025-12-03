@@ -31,6 +31,10 @@ export default function SettingsPage() {
     videoUrl1: '',
     videoUrl2: '',
     videoUrl3: '',
+    instagramPost1: '',
+    instagramPost2: '',
+    instagramPost3: '',
+    facebookUrl: '',
   });
 
   useEffect(() => {
@@ -186,11 +190,40 @@ export default function SettingsPage() {
           <input type="text" name="videoUrl3" value={formData.videoUrl3 || ''} onChange={handleChange} placeholder="Paste YouTube Link" style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
         </div>
 
+        {/* Instagram Posts */}
+        <h3 style={{ borderBottom: '1px solid #eee', paddingBottom: '10px', marginBottom: '20px', marginTop: '40px' }}>Instagram Posts</h3>
+        <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '15px' }}>Paste the full Instagram Post URL (e.g., https://www.instagram.com/p/Code...).</p>
+        
+        <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Instagram Post 1 URL</label>
+          <input type="text" name="instagramPost1" value={formData.instagramPost1 || ''} onChange={handleChange} placeholder="https://www.instagram.com/p/..." style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
+        </div>
+        <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Instagram Post 2 URL</label>
+          <input type="text" name="instagramPost2" value={formData.instagramPost2 || ''} onChange={handleChange} placeholder="https://www.instagram.com/p/..." style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
+        </div>
+        <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Instagram Post 3 URL</label>
+          <input type="text" name="instagramPost3" value={formData.instagramPost3 || ''} onChange={handleChange} placeholder="https://www.instagram.com/p/..." style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
+        </div>
+
         {/* Contact */}
         <h3 style={{ borderBottom: '1px solid #eee', paddingBottom: '10px', marginBottom: '20px', marginTop: '40px' }}>Contact & Social</h3>
         <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Instagram URL</label>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Contact Email</label>
+          <input type="email" name="contactEmail" value={formData.contactEmail || ''} onChange={handleChange} style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
+        </div>
+        <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Contact Phone</label>
+          <input type="text" name="contactPhone" value={formData.contactPhone || ''} onChange={handleChange} style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
+        </div>
+        <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Instagram Profile URL</label>
           <input type="text" name="instagramUrl" value={formData.instagramUrl || ''} onChange={handleChange} style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
+        </div>
+        <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Facebook Profile URL</label>
+          <input type="text" name="facebookUrl" value={formData.facebookUrl || ''} onChange={handleChange} style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
         </div>
 
         <button type="submit" className="cta-button" disabled={saving} style={{ width: '100%', border: 'none', cursor: saving ? 'wait' : 'pointer', marginTop: '20px' }}>

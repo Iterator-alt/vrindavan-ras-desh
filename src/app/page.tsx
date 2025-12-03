@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
+import { InstagramEmbed } from 'react-social-media-embed';
 
 export const revalidate = 0; // Dynamic data
 
@@ -90,19 +91,27 @@ export default async function Home() {
           <div style={{ textAlign: 'center' }}>
             <p style={{ marginBottom: '2rem' }}>Follow our daily updates on Instagram.</p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap' }}>
-              {/* Placeholder for Instagram Embeds */}
-              <div style={{ width: '300px', height: '400px', background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '10px' }}>
-                <p>Instagram Post 1</p>
-              </div>
-              <div style={{ width: '300px', height: '400px', background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '10px' }}>
-                <p>Instagram Post 2</p>
-              </div>
-              <div style={{ width: '300px', height: '400px', background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '10px' }}>
-                <p>Instagram Post 3</p>
-              </div>
+              {settings?.instagramPost1 && (
+                <div style={{ width: '328px' }}>
+                  <InstagramEmbed url={settings.instagramPost1} width={328} />
+                </div>
+              )}
+              {settings?.instagramPost2 && (
+                <div style={{ width: '328px' }}>
+                  <InstagramEmbed url={settings.instagramPost2} width={328} />
+                </div>
+              )}
+              {settings?.instagramPost3 && (
+                <div style={{ width: '328px' }}>
+                  <InstagramEmbed url={settings.instagramPost3} width={328} />
+                </div>
+              )}
+              {!settings?.instagramPost1 && !settings?.instagramPost2 && !settings?.instagramPost3 && (
+                 <p>No Instagram posts configured yet.</p>
+              )}
             </div>
             <div style={{ marginTop: '2rem' }}>
-              <a href="https://www.instagram.com/" target="_blank" className="cta-button" style={{ background: '#E1306C' }}>Follow on Instagram</a>
+              <a href={settings?.instagramUrl || "https://www.instagram.com/"} target="_blank" className="cta-button" style={{ background: '#E1306C' }}>Follow on Instagram</a>
             </div>
           </div>
         </div>
@@ -114,10 +123,14 @@ export default async function Home() {
           <h2 className="section-title">Connect With Us</h2>
           <div style={{ textAlign: 'center' }}>
             <p style={{ marginBottom: '2rem' }}>For inquiries, collaborations, or to share your experiences, please reach out to us.</p>
+            
+            {settings?.contactEmail && <p style={{marginBottom: '10px'}}><strong>Email:</strong> {settings.contactEmail}</p>}
+            {settings?.contactPhone && <p style={{marginBottom: '20px'}}><strong>Phone:</strong> {settings.contactPhone}</p>}
+
             <div className="social-links" style={{ marginBottom: '2rem' }}>
               <a href="https://www.youtube.com/@vrindavanrasdesh" target="_blank" style={{ color: 'var(--primary-color)', fontSize: '3rem', margin: '0 10px' }}><i className="fab fa-youtube"></i></a>
-              <a href="#" style={{ color: 'var(--primary-color)', fontSize: '3rem', margin: '0 10px' }}><i className="fab fa-instagram"></i></a>
-              <a href="#" style={{ color: 'var(--primary-color)', fontSize: '3rem', margin: '0 10px' }}><i className="fab fa-facebook"></i></a>
+              {settings?.instagramUrl && <a href={settings.instagramUrl} target="_blank" style={{ color: 'var(--primary-color)', fontSize: '3rem', margin: '0 10px' }}><i className="fab fa-instagram"></i></a>}
+              {settings?.facebookUrl && <a href={settings.facebookUrl} target="_blank" style={{ color: 'var(--primary-color)', fontSize: '3rem', margin: '0 10px' }}><i className="fab fa-facebook"></i></a>}
             </div>
             <p>Jai Shri Radhe! Jai Shri Krishna!</p>
           </div>

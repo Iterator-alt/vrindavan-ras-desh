@@ -45,4 +45,8 @@ model SiteSettings {
   videoUrl1      String?
   videoUrl2      String?
   videoUrl3      String?
+  instagramPost1 String?
+  instagramPost2 String?
+  instagramPost3 String?
+  facebookUrl    String?
 }
