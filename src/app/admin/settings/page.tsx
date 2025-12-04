@@ -1,3 +1,5 @@
+// Admin Settings Page - Updated 2025-12-04
+// All Instagram post fields and contact details are present
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
