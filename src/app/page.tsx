@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
-import { InstagramEmbed } from 'react-social-media-embed';
 
 export const revalidate = 0; // Dynamic data
 
@@ -92,22 +91,22 @@ export default async function Home() {
             <p style={{ marginBottom: '2rem' }}>Follow our daily updates on Instagram.</p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap' }}>
               {settings?.instagramPost1 && (
-                <div style={{ width: '328px' }}>
-                  <InstagramEmbed url={settings.instagramPost1} width={328} />
+                <div style={{ width: '300px', height: '400px', background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '10px' }}>
+                  <a href={settings.instagramPost1} target="_blank" style={{ color: '#E1306C', textDecoration: 'none' }}>View Post 1</a>
                 </div>
               )}
               {settings?.instagramPost2 && (
-                <div style={{ width: '328px' }}>
-                  <InstagramEmbed url={settings.instagramPost2} width={328} />
+                <div style={{ width: '300px', height: '400px', background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '10px' }}>
+                  <a href={settings.instagramPost2} target="_blank" style={{ color: '#E1306C', textDecoration: 'none' }}>View Post 2</a>
                 </div>
               )}
               {settings?.instagramPost3 && (
-                <div style={{ width: '328px' }}>
-                  <InstagramEmbed url={settings.instagramPost3} width={328} />
+                <div style={{ width: '300px', height: '400px', background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '10px' }}>
+                  <a href={settings.instagramPost3} target="_blank" style={{ color: '#E1306C', textDecoration: 'none' }}>View Post 3</a>
                 </div>
               )}
               {!settings?.instagramPost1 && !settings?.instagramPost2 && !settings?.instagramPost3 && (
-                 <p>No Instagram posts configured yet.</p>
+                <p>No Instagram posts configured yet.</p>
               )}
             </div>
             <div style={{ marginTop: '2rem' }}>
