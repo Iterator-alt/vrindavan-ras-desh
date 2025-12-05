@@ -46,8 +46,11 @@ model SiteSettings {
   heroImageUrl3  String?
   heroImageUrl4  String?
   videoUrl1      String?
+  videoTitle1    String?
   videoUrl2      String?
+  videoTitle2    String?
   videoUrl3      String?
+  videoTitle3    String?
   instagramPost1 String?
   instagramPost2 String?
   instagramPost3 String?

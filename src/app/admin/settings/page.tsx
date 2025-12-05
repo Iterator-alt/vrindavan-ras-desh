@@ -35,8 +35,11 @@ export default function SettingsPage() {
     instagramUrl: '',
     youtubeUrl: '',
     videoUrl1: '',
+    videoTitle1: '',
     videoUrl2: '',
+    videoTitle2: '',
     videoUrl3: '',
+    videoTitle3: '',
     instagramPost1: '',
     instagramPost2: '',
     instagramPost3: '',
@@ -197,15 +200,18 @@ export default function SettingsPage() {
         
         <div className="form-group" style={{ marginBottom: '1.5rem' }}>
           <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Video 1</label>
-          <input type="text" name="videoUrl1" value={formData.videoUrl1 || ''} onChange={handleChange} placeholder="Paste YouTube Link" style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
+          <input type="text" name="videoUrl1" value={formData.videoUrl1 || ''} onChange={handleChange} placeholder="Paste YouTube Link" style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd', marginBottom: '10px' }} />
+          <input type="text" name="videoTitle1" value={(formData as any).videoTitle1 || ''} onChange={handleChange} placeholder="Video 1 Title/Caption" style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
         </div>
         <div className="form-group" style={{ marginBottom: '1.5rem' }}>
           <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Video 2</label>
-          <input type="text" name="videoUrl2" value={formData.videoUrl2 || ''} onChange={handleChange} placeholder="Paste YouTube Link" style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
+          <input type="text" name="videoUrl2" value={formData.videoUrl2 || ''} onChange={handleChange} placeholder="Paste YouTube Link" style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd', marginBottom: '10px' }} />
+          <input type="text" name="videoTitle2" value={(formData as any).videoTitle2 || ''} onChange={handleChange} placeholder="Video 2 Title/Caption" style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
         </div>
         <div className="form-group" style={{ marginBottom: '1.5rem' }}>
           <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Video 3</label>
-          <input type="text" name="videoUrl3" value={formData.videoUrl3 || ''} onChange={handleChange} placeholder="Paste YouTube Link" style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
+          <input type="text" name="videoUrl3" value={formData.videoUrl3 || ''} onChange={handleChange} placeholder="Paste YouTube Link" style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd', marginBottom: '10px' }} />
+          <input type="text" name="videoTitle3" value={(formData as any).videoTitle3 || ''} onChange={handleChange} placeholder="Video 3 Title/Caption" style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
         </div>
 
         {/* Instagram Posts */}

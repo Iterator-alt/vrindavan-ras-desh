@@ -58,7 +58,7 @@ export default async function Home() {
                 <iframe width="100%" height="100%" src={video1} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
               </div>
               <div className="video-info">
-                <h3>Featured Video 1</h3>
+                <h3>{settings?.videoTitle1 || 'Featured Video 1'}</h3>
                 <p>Experience the divine bliss.</p>
               </div>
             </div>
@@ -68,7 +68,7 @@ export default async function Home() {
                 <iframe width="100%" height="100%" src={video2} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
               </div>
               <div className="video-info">
-                <h3>Featured Video 2</h3>
+                <h3>{settings?.videoTitle2 || 'Featured Video 2'}</h3>
                 <p>Divine darshan of Vrindavan.</p>
               </div>
             </div>
@@ -78,7 +78,7 @@ export default async function Home() {
                 <iframe width="100%" height="100%" src={video3} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
               </div>
               <div className="video-info">
-                <h3>Featured Video 3</h3>
+                <h3>{settings?.videoTitle3 || 'Featured Video 3'}</h3>
                 <p>Spiritual discourse and kirtan.</p>
               </div>
             </div>
