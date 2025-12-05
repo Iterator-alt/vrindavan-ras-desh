@@ -12,6 +12,7 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [activeField, setActiveField] = useState('heroImageUrl');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
@@ -26,6 +27,9 @@ export default function SettingsPage() {
     heroTitle: '',
     heroSubtitle: '',
     heroImageUrl: '',
+    heroImageUrl2: '',
+    heroImageUrl3: '',
+    heroImageUrl4: '',
     contactEmail: '',
     contactPhone: '',
     instagramUrl: '',
@@ -87,7 +91,7 @@ export default function SettingsPage() {
       }
 
       const newBlob = await response.json();
-      setFormData(prev => ({ ...prev, heroImageUrl: newBlob.url }));
+      setFormData(prev => ({ ...prev, [activeField]: newBlob.url }));
     } catch (error) {
       console.error('Error uploading file:', error);
       alert('Failed to upload image. Please try again.');
@@ -134,46 +138,58 @@ export default function SettingsPage() {
           <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Hero Subtitle</label>
           <textarea name="heroSubtitle" value={formData.heroSubtitle || ''} onChange={handleChange} rows={3} style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
         </div>
-        <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Background Image</label>
-          <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-            <input 
-              type="text" 
-              name="heroImageUrl" 
-              value={formData.heroImageUrl || ''} 
-              onChange={handleChange} 
-              placeholder="https://..." 
-              style={{ flex: 1, padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} 
-            />
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileUpload}
-              accept="image/*"
-              style={{ display: 'none' }}
-            />
-            <button 
-              type="button" 
-              onClick={() => fileInputRef.current?.click()}
-              disabled={uploading}
-              style={{ 
-                padding: '10px 20px', 
-                background: '#eee', 
-                border: '1px solid #ddd', 
-                borderRadius: '5px',
-                cursor: uploading ? 'wait' : 'pointer'
-              }}
-            >
-              {uploading ? 'Uploading...' : 'Upload'}
-            </button>
-          </div>
-          {formData.heroImageUrl && (
-            <div style={{ marginTop: '10px', width: '100%', height: '200px', overflow: 'hidden', borderRadius: '5px', border: '1px solid #ddd' }}>
-              <img src={formData.heroImageUrl} alt="Hero Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        {/* Hero Images */}
+        {[
+          { key: 'heroImageUrl', label: 'Hero Image 1 (Main)' },
+          { key: 'heroImageUrl2', label: 'Hero Image 2' },
+          { key: 'heroImageUrl3', label: 'Hero Image 3' },
+          { key: 'heroImageUrl4', label: 'Hero Image 4' },
+        ].map((imgField) => (
+          <div key={imgField.key} className="form-group" style={{ marginBottom: '1.5rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>{imgField.label}</label>
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+              <input 
+                type="text" 
+                name={imgField.key} 
+                value={(formData as any)[imgField.key] || ''} 
+                onChange={handleChange} 
+                placeholder="https://..." 
+                style={{ flex: 1, padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} 
+              />
+              <button 
+                type="button" 
+                onClick={() => {
+                  setActiveField(imgField.key);
+                  fileInputRef.current?.click();
+                }}
+                disabled={uploading}
+                style={{ 
+                  padding: '10px 20px', 
+                  background: '#eee', 
+                  border: '1px solid #ddd', 
+                  borderRadius: '5px',
+                  cursor: uploading ? 'wait' : 'pointer'
+                }}
+              >
+                {uploading && activeField === imgField.key ? 'Uploading...' : 'Upload'}
+              </button>
             </div>
-          )}
-          <p style={{ fontSize: '0.8rem', color: '#888', marginTop: '5px' }}>Paste a direct link or upload an image.</p>
-        </div>
+            {(formData as any)[imgField.key] && (
+              <div style={{ marginTop: '10px', width: '100%', height: '200px', overflow: 'hidden', borderRadius: '5px', border: '1px solid #ddd' }}>
+                <img src={(formData as any)[imgField.key]} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+            )}
+          </div>
+        ))}
+        
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileUpload}
+          accept="image/*"
+          style={{ display: 'none' }}
+        />
+        <p style={{ fontSize: '0.8rem', color: '#888', marginTop: '5px' }}>Paste a direct link or upload an image.</p>
 
         {/* Videos */}
         <h3 style={{ borderBottom: '1px solid #eee', paddingBottom: '10px', marginBottom: '20px', marginTop: '40px' }}>Featured Videos</h3>

@@ -106,8 +106,9 @@ img {
 
 /* Hero Section */
 .hero {
+    min-height: 100vh;
     height: 100vh;
-    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1561583669-7c875954d72d?q=80&w=1920&auto=format&fit=crop'); /* Placeholder image of temple/spiritual */
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1561583669-7c875954d72d?q=80&w=1920&auto=format&fit=crop');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -116,7 +117,71 @@ img {
     justify-content: center;
     text-align: center;
     color: var(--white);
-    padding-top: 80px; /* Offset for fixed nav */
+    padding-top: 80px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hero Carousel Styles */
+.hero-carousel {
+    background: none;
+}
+
+.carousel-images {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.carousel-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.carousel-slide.active {
+    opacity: 1;
+}
+
+.carousel-dots {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 10;
+}
+
+.carousel-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.carousel-dot:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: scale(1.2);
+}
+
+.carousel-dot.active {
+    background: var(--secondary-color);
+    border-color: var(--secondary-color);
+    transform: scale(1.3);
 }
 
 .hero-content h1 {
@@ -230,6 +295,61 @@ footer {
     font-size: 1.5rem;
 }
 
+/* Instagram Embed Styles */
+.instagram-embed-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.instagram-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    background: #f9f9f9;
+    border-radius: 10px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #E1306C;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.instagram-fallback {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.instagram-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    border: 2px dashed #E1306C;
+    transition: all 0.3s ease;
+}
+
+.instagram-placeholder:hover {
+    background: #fff;
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(225, 48, 108, 0.2);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .nav-links {
@@ -253,7 +373,62 @@ footer {
         display: block;
     }
 
+    /* Hero responsive fixes */
+    .hero {
+        min-height: 100vh;
+        height: auto;
+        background-attachment: scroll !important; /* Fix for mobile */
+        padding: 100px 20px 60px;
+    }
+
+    .carousel-slide {
+        background-attachment: scroll !important;
+    }
+
     .hero-content h1 {
-        font-size: 2.5rem;
+        font-size: 2rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+
+    .carousel-dots {
+        bottom: 20px;
+        gap: 8px;
+    }
+
+    .carousel-dot {
+        width: 10px;
+        height: 10px;
+    }
+
+    /* Section padding */
+    section {
+        padding: 60px 0;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    /* Instagram embeds on mobile */
+    .instagram-embed-container {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content h1 {
+        font-size: 1.75rem;
+    }
+
+    .hero-content p {
+        font-size: 0.95rem;
+    }
+
+    .cta-button {
+        padding: 10px 24px;
+        font-size: 0.9rem;
     }
 }

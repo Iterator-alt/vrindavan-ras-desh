@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
+import HeroCarousel from '@/components/HeroCarousel';
+import InstagramEmbed from '@/components/InstagramEmbed';
 
 export const revalidate = 0; // Dynamic data
 
@@ -8,21 +10,25 @@ export default async function Home() {
     where: { id: 'default' },
   });
 
-  const heroBg = settings?.heroImageUrl || 'https://images.unsplash.com/photo-1561583669-7c875954d72d?q=80&w=1920&auto=format&fit=crop';
+  const heroImages = [
+    settings?.heroImageUrl,
+    settings?.heroImageUrl2,
+    settings?.heroImageUrl3,
+    settings?.heroImageUrl4,
+  ];
+
   const video1 = settings?.videoUrl1 || 'https://www.youtube.com/embed/videoseries?list=PLU12uITxBEPGsXqgC-Vd5XnK-WqXnK-Wq';
   const video2 = settings?.videoUrl2 || 'https://www.youtube.com/embed/videoseries?list=PLU12uITxBEPGsXqgC-Vd5XnK-WqXnK-Wq';
   const video3 = settings?.videoUrl3 || 'https://www.youtube.com/embed/videoseries?list=PLU12uITxBEPGsXqgC-Vd5XnK-WqXnK-Wq';
 
   return (
     <main>
-      {/* Hero Section */}
-      <header id="home" className="hero" style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${heroBg}')` }}>
-        <div className="container hero-content">
-          <h1>{settings?.heroTitle || 'Welcome to Vrindavan Ras Desh'}</h1>
-          <p>{settings?.heroSubtitle || 'Immerse yourself in the eternal divine love and spiritual bliss of Shri Vrindavan Dham.'}</p>
-          <Link href="#videos" className="cta-button">Watch Videos</Link>
-        </div>
-      </header>
+      {/* Hero Section with Carousel */}
+      <HeroCarousel 
+        images={heroImages}
+        title={settings?.heroTitle || 'Welcome to Vrindavan Ras Desh'}
+        subtitle={settings?.heroSubtitle || 'Immerse yourself in the eternal divine love and spiritual bliss of Shri Vrindavan Dham.'}
+      />
 
       {/* About Section */}
       <section id="about">
@@ -91,18 +97,18 @@ export default async function Home() {
             <p style={{ marginBottom: '2rem' }}>Follow our daily updates on Instagram.</p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap' }}>
               {settings?.instagramPost1 && (
-                <div style={{ width: '300px', height: '400px', background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '10px' }}>
-                  <a href={settings.instagramPost1} target="_blank" style={{ color: '#E1306C', textDecoration: 'none' }}>View Post 1</a>
+                <div style={{ width: '100%', maxWidth: '350px' }}>
+                  <InstagramEmbed postUrl={settings.instagramPost1} />
                 </div>
               )}
               {settings?.instagramPost2 && (
-                <div style={{ width: '300px', height: '400px', background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '10px' }}>
-                  <a href={settings.instagramPost2} target="_blank" style={{ color: '#E1306C', textDecoration: 'none' }}>View Post 2</a>
+                <div style={{ width: '100%', maxWidth: '350px' }}>
+                  <InstagramEmbed postUrl={settings.instagramPost2} />
                 </div>
               )}
               {settings?.instagramPost3 && (
-                <div style={{ width: '300px', height: '400px', background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '10px' }}>
-                  <a href={settings.instagramPost3} target="_blank" style={{ color: '#E1306C', textDecoration: 'none' }}>View Post 3</a>
+                <div style={{ width: '100%', maxWidth: '350px' }}>
+                  <InstagramEmbed postUrl={settings.instagramPost3} />
                 </div>
               )}
               {!settings?.instagramPost1 && !settings?.instagramPost2 && !settings?.instagramPost3 && (
