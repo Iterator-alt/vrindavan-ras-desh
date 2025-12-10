@@ -22,6 +22,13 @@ export default async function AdminDashboard() {
         </p>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
+          {/* Product Management */}
+          <div style={{ border: '1px solid #eee', padding: '1.5rem', borderRadius: '8px' }}>
+            <h3><i className="fas fa-shopping-bag" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Product Management</h3>
+            <p style={{ marginBottom: '1rem', color: '#666' }}>Manage store products and inventory.</p>
+            <Link href="/admin/products" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>Manage Products</Link>
+          </div>
+
           {/* Blog Management */}
           <div style={{ border: '1px solid #eee', padding: '1.5rem', borderRadius: '8px' }}>
             <h3><i className="fas fa-pen-fancy" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Blog Management</h3>
@@ -34,6 +41,13 @@ export default async function AdminDashboard() {
             <h3><i className="fas fa-cog" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Site Settings</h3>
             <p style={{ marginBottom: '1rem', color: '#666' }}>Update contact info and links.</p>
             <Link href="/admin/settings" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>Manage Settings</Link>
+          </div>
+
+          {/* Order Management */}
+          <div style={{ border: '1px solid #eee', padding: '1.5rem', borderRadius: '8px' }}>
+            <h3><i className="fas fa-box" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Order Management</h3>
+            <p style={{ marginBottom: '1rem', color: '#666' }}>View and manage customer orders.</p>
+            <Link href="/admin/orders" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>View Orders</Link>
           </div>
 
           {/* User Management (Superadmin Only) */}
