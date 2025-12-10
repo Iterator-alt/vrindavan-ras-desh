@@ -1,20 +1,20 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Lato, Playfair_Display } from 'next/font/google'
+import { Poppins, Cinzel } from 'next/font/google'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Providers from '@/components/Providers'
 
-const lato = Lato({ 
+const poppins = Poppins({ 
   subsets: ['latin'],
-  weight: ['300', '400', '700'],
+  weight: ['300', '400', '500', '600', '700'],
   variable: '--font-body',
   display: 'swap',
 })
 
-const playfair = Playfair_Display({ 
+const cinzel = Cinzel({ 
   subsets: ['latin'],
-  weight: ['400', '700'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-heading',
   display: 'swap',
 })
@@ -34,7 +34,7 @@ export default function RootLayout({
       <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
       </head>
-      <body className={`${lato.variable} ${playfair.variable}`}>
+      <body className={`${poppins.variable} ${cinzel.variable}`}>
         <Providers>
           <Navbar />
           {children}
