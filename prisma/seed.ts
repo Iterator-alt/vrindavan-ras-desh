@@ -18,6 +18,26 @@ async function main() {
     })
 
     console.log({ user })
+
+    // Seed default categories for the store
+    const categories = [
+        { name: 'Books', slug: 'books', description: 'Spiritual books and scriptures' },
+        { name: 'Idols & Murtis', slug: 'idols-murtis', description: 'Sacred idols and deity murtis' },
+        { name: 'Puja Items', slug: 'puja-items', description: 'Items for worship and puja' },
+        { name: 'Prasadam', slug: 'prasadam', description: 'Sacred food offerings' },
+        { name: 'Clothing', slug: 'clothing', description: 'Traditional spiritual clothing' },
+        { name: 'Audio & Video', slug: 'audio-video', description: 'Bhajans, kirtans, and spiritual videos' },
+    ]
+
+    for (const category of categories) {
+        await prisma.category.upsert({
+            where: { slug: category.slug },
+            update: {},
+            create: category,
+        })
+    }
+
+    console.log('Seeded categories:', categories.length)
 }
 
 main()
