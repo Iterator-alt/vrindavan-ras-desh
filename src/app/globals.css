@@ -506,18 +506,6 @@ footer {
         font-size: var(--text-2xl);
     }
 
-    .cta-button {
-        padding: 12px 28px;
-        font-size: 0.9rem;
-    }
-}
-
-/* Product Card Hover Effect */
-.product-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important;
-}
-
     .hero-content p {
         font-size: var(--text-sm);
     }
@@ -530,4 +518,10 @@ footer {
     .section-title {
         font-size: var(--text-2xl);
     }
+}
+
+/* Product Card Hover Effect */
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important;
 }
