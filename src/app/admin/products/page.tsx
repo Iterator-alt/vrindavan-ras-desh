@@ -324,6 +324,35 @@ export default function ProductsManagementPage() {
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>
                 Product Photos
               </label>
+              
+              {/* URL Input Option */}
+              <div style={{ marginBottom: '1rem' }}>
+                <input
+                  type="text"
+                  placeholder="Or paste image URL (https://...)"
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      const input = e.currentTarget;
+                      const url = input.value.trim();
+                      if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+                        setFormData(prev => ({
+                          ...prev,
+                          images: [...prev.images, url],
+                        }));
+                        input.value = '';
+                      } else if (url) {
+                        alert('Please enter a valid URL starting with http:// or https://');
+                      }
+                    }
+                  }}
+                  style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd', fontSize: '0.9rem' }}
+                />
+                <p style={{ fontSize: '0.75rem', color: '#666', marginTop: '4px' }}>
+                  Press Enter to add image URL
+                </p>
+              </div>
+
               <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
                 {formData.images.map((img, index) => (
                   <div key={index} style={{ position: 'relative', width: '120px', height: '120px' }}>
@@ -353,7 +382,9 @@ export default function ProductsManagementPage() {
                   style={{ display: 'none' }}
                 />
               </div>
-              <p style={{ fontSize: '0.85rem', color: '#666' }}>Click + to upload product photos</p>
+              <p style={{ fontSize: '0.85rem', color: '#666' }}>
+                Click + to upload from computer, or paste image URL above
+              </p>
             </div>
 
             {/* Checkboxes */}
