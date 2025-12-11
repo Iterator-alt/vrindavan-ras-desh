@@ -137,6 +137,7 @@ export default async function ShopPage({
                 <Link
                   key={product.id}
                   href={`/shop/${product.slug}`}
+                  className="product-card"
                   style={{
                     background: 'white',
                     borderRadius: '12px',
@@ -146,14 +147,6 @@ export default async function ShopPage({
                     textDecoration: 'none',
                     color: 'inherit',
                     display: 'block',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-8px)';
-                    e.currentTarget.style.boxShadow = '0 8px 20px rgba(0,0,0,0.15)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.08)';
                   }}
                 >
                   {/* Product Image */}
