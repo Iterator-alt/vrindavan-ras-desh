@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
+import MiniCart from './MiniCart';
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -18,6 +19,7 @@ export default function Navbar() {
                 <ul className={`nav-links ${isOpen ? 'active' : ''}`}>
                     <li><Link href="/#home" onClick={() => setIsOpen(false)}>Home</Link></li>
                     <li><Link href="/#about" onClick={() => setIsOpen(false)}>About</Link></li>
+                    <li><Link href="/shop" onClick={() => setIsOpen(false)}>Shop</Link></li>
                     <li><Link href="/#videos" onClick={() => setIsOpen(false)}>Videos</Link></li>
                     <li><Link href="/blog" onClick={() => setIsOpen(false)}>Blog</Link></li>
                     <li><Link href="/#contact" onClick={() => setIsOpen(false)}>Contact</Link></li>
@@ -26,6 +28,9 @@ export default function Navbar() {
                     ) : (
                         <li><Link href="/login" onClick={() => setIsOpen(false)} style={{ color: 'var(--primary-color)', fontWeight: 'bold' }}>Login</Link></li>
                     )}
+                    <li style={{ marginLeft: '1rem' }}>
+                        <MiniCart />
+                    </li>
                 </ul>
             </div>
         </nav>
