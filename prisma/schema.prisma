@@ -46,6 +46,7 @@ model SiteSettings {
   heroImageUrl2  String?
   heroImageUrl3  String?
   heroImageUrl4  String?
+  heroImages     String[]  @default([])
   videoUrl1      String?
   videoTitle1    String?
   videoUrl2      String?

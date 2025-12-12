@@ -30,6 +30,7 @@ export default function SettingsPage() {
     heroImageUrl2: '',
     heroImageUrl3: '',
     heroImageUrl4: '',
+    heroImages: [] as string[],
     contactEmail: '',
     contactPhone: '',
     instagramUrl: '',
@@ -50,7 +51,15 @@ export default function SettingsPage() {
     fetch('/api/settings')
       .then(res => res.json())
       .then(data => {
-        setFormData(prev => ({ ...prev, ...data }));
+        // Migration logic: If heroImages is empty but legacy fields exist, populate it
+        let images = data.heroImages || [];
+        if (images.length === 0) {
+          if (data.heroImageUrl) images.push(data.heroImageUrl);
+          if (data.heroImageUrl2) images.push(data.heroImageUrl2);
+          if (data.heroImageUrl3) images.push(data.heroImageUrl3);
+          if (data.heroImageUrl4) images.push(data.heroImageUrl4);
+        }
+        setFormData(prev => ({ ...prev, ...data, heroImages: images }));
         setLoading(false);
       })
       .catch(err => {
@@ -94,7 +103,15 @@ export default function SettingsPage() {
       }
 
       const newBlob = await response.json();
-      setFormData(prev => ({ ...prev, [activeField]: newBlob.url }));
+      
+      if (activeField === 'heroImages') {
+        setFormData(prev => ({
+          ...prev,
+          heroImages: [...((prev as any).heroImages || []), newBlob.url]
+        }));
+      } else {
+        setFormData(prev => ({ ...prev, [activeField]: newBlob.url }));
+      }
     } catch (error) {
       console.error('Error uploading file:', error);
       alert('Failed to upload image. Please try again.');
@@ -142,48 +159,102 @@ export default function SettingsPage() {
           <textarea name="heroSubtitle" value={formData.heroSubtitle || ''} onChange={handleChange} rows={3} style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
         </div>
         {/* Hero Images */}
-        {[
-          { key: 'heroImageUrl', label: 'Hero Image 1 (Main)' },
-          { key: 'heroImageUrl2', label: 'Hero Image 2' },
-          { key: 'heroImageUrl3', label: 'Hero Image 3' },
-          { key: 'heroImageUrl4', label: 'Hero Image 4' },
-        ].map((imgField) => (
-          <div key={imgField.key} className="form-group" style={{ marginBottom: '1.5rem' }}>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>{imgField.label}</label>
-            <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-              <input 
-                type="text" 
-                name={imgField.key} 
-                value={(formData as any)[imgField.key] || ''} 
-                onChange={handleChange} 
-                placeholder="https://..." 
-                style={{ flex: 1, padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} 
-              />
-              <button 
-                type="button" 
+        {/* Hero Images */}
+        <div style={{ marginBottom: '2rem' }}>
+          <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 'bold' }}>
+            Hero Images (Max 20)
+          </label>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
+            {/* Existing Images */}
+            {(formData as any).heroImages?.map((img: string, index: number) => (
+              <div key={index} style={{ position: 'relative', aspectRatio: '16/9', border: '1px solid #ddd', borderRadius: '5px', overflow: 'hidden' }}>
+                <img src={img} alt={`Hero ${index + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newImages = [...(formData as any).heroImages];
+                    newImages.splice(index, 1);
+                    setFormData(prev => ({ ...prev, heroImages: newImages }));
+                  }}
+                  style={{
+                    position: 'absolute',
+                    top: '5px',
+                    right: '5px',
+                    background: 'rgba(255,0,0,0.8)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: '24px',
+                    height: '24px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '14px'
+                  }}
+                >
+                  ×
+                </button>
+                <div style={{ position: 'absolute', bottom: '5px', left: '5px', background: 'rgba(0,0,0,0.5)', color: 'white', padding: '2px 6px', borderRadius: '3px', fontSize: '10px' }}>
+                  {index + 1}
+                </div>
+              </div>
+            ))}
+
+            {/* Add New Button */}
+            {((formData as any).heroImages?.length || 0) < 20 && (
+              <button
+                type="button"
                 onClick={() => {
-                  setActiveField(imgField.key);
+                  setActiveField('heroImages');
                   fileInputRef.current?.click();
                 }}
                 disabled={uploading}
-                style={{ 
-                  padding: '10px 20px', 
-                  background: '#eee', 
-                  border: '1px solid #ddd', 
+                style={{
+                  aspectRatio: '16/9',
+                  border: '2px dashed #ddd',
                   borderRadius: '5px',
-                  cursor: uploading ? 'wait' : 'pointer'
+                  background: '#f9f9f9',
+                  cursor: uploading ? 'wait' : 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#666'
                 }}
               >
-                {uploading && activeField === imgField.key ? 'Uploading...' : 'Upload'}
+                <span style={{ fontSize: '24px', marginBottom: '5px' }}>+</span>
+                <span style={{ fontSize: '12px' }}>{uploading && activeField === 'heroImages' ? 'Uploading...' : 'Add Image'}</span>
               </button>
-            </div>
-            {(formData as any)[imgField.key] && (
-              <div style={{ marginTop: '10px', width: '100%', height: '200px', overflow: 'hidden', borderRadius: '5px', border: '1px solid #ddd' }}>
-                <img src={(formData as any)[imgField.key]} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
             )}
           </div>
-        ))}
+
+          {/* URL Input for Hero Images */}
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <input
+              type="text"
+              placeholder="Or paste image URL and press Enter"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  const val = e.currentTarget.value.trim();
+                  if (val) {
+                    setFormData(prev => ({
+                      ...prev,
+                      heroImages: [...((prev as any).heroImages || []), val]
+                    }));
+                    e.currentTarget.value = '';
+                  }
+                }
+              }}
+              style={{ flex: 1, padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }}
+            />
+          </div>
+          <p style={{ fontSize: '0.8rem', color: '#888', marginTop: '5px' }}>
+            Upload from computer or paste URL. Drag to reorder (coming soon).
+          </p>
+        </div>
         
         <input
           type="file"

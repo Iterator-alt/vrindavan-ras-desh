@@ -64,15 +64,16 @@ export default function HeroCarousel({ images, title, subtitle, ctaText = 'Watch
       <header 
         id="home" 
         className="hero" 
-        style={{ 
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1561583669-7c875954d72d?q=80&w=1920&auto=format&fit=crop')`
-        }}
+        style={{ position: 'relative' }}
       >
-        <div className="container hero-content">
-          <h1>{title}</h1>
-          <p>{subtitle}</p>
-          <a href={ctaLink} className="cta-button">{ctaText}</a>
-        </div>
+        <Image
+          src="https://images.unsplash.com/photo-1561583669-7c875954d72d?q=80&w=1920&auto=format&fit=crop"
+          alt="Vrindavan"
+          fill
+          style={{ objectFit: 'cover' }}
+          priority
+        />
+        {/* Overlay removed as requested */}
       </header>
     );
   }
@@ -84,6 +85,7 @@ export default function HeroCarousel({ images, title, subtitle, ctaText = 'Watch
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
+      style={{ position: 'relative' }}
     >
       {/* Background Images */}
       <div className="carousel-images">
@@ -91,23 +93,27 @@ export default function HeroCarousel({ images, title, subtitle, ctaText = 'Watch
           <div
             key={index}
             className={`carousel-slide ${index === currentIndex ? 'active' : ''}`}
-            style={{
-              backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${image}')`,
-            }}
-          />
+            style={{ opacity: index === currentIndex ? 1 : 0, transition: 'opacity 1s ease-in-out', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+          >
+            <Image
+              src={image}
+              alt={`Slide ${index + 1}`}
+              fill
+              style={{ objectFit: 'cover' }}
+              priority={index === 0} // Priority load first image
+              loading={index === 0 ? 'eager' : 'lazy'}
+            />
+            {/* Dark gradient overlay for better visibility if text was there, but kept for consistency/aesthetics */}
+            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2))' }}></div>
+          </div>
         ))}
       </div>
 
-      {/* Content Overlay */}
-      <div className="container hero-content">
-        <h1>{title}</h1>
-        <p>{subtitle}</p>
-        <a href={ctaLink} className="cta-button">{ctaText}</a>
-      </div>
+      {/* Content Overlay REMOVED as requested */}
 
       {/* Navigation Dots */}
       {validImages.length > 1 && (
-        <div className="carousel-dots">
+        <div className="carousel-dots" style={{ zIndex: 20 }}>
           {validImages.map((_, index) => (
             <button
               key={index}

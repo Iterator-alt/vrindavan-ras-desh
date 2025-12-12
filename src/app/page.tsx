@@ -10,12 +10,16 @@ export default async function Home() {
     where: { id: 'default' },
   });
 
-  const heroImages = [
-    settings?.heroImageUrl,
-    settings?.heroImageUrl2,
-    settings?.heroImageUrl3,
-    settings?.heroImageUrl4,
-  ];
+  // Use new heroImages array if available, otherwise fall back to legacy fields
+  let heroImages = settings?.heroImages || [];
+  if (heroImages.length === 0) {
+    heroImages = [
+      settings?.heroImageUrl,
+      settings?.heroImageUrl2,
+      settings?.heroImageUrl3,
+      settings?.heroImageUrl4,
+    ].filter(Boolean) as string[];
+  }
 
   const video1 = settings?.videoUrl1 || 'https://www.youtube.com/embed/videoseries?list=PLU12uITxBEPGsXqgC-Vd5XnK-WqXnK-Wq';
   const video2 = settings?.videoUrl2 || 'https://www.youtube.com/embed/videoseries?list=PLU12uITxBEPGsXqgC-Vd5XnK-WqXnK-Wq';
@@ -26,8 +30,8 @@ export default async function Home() {
       {/* Hero Section with Carousel */}
       <HeroCarousel 
         images={heroImages}
-        title={settings?.heroTitle || 'Welcome to Vrindavan Ras Desh'}
-        subtitle={settings?.heroSubtitle || 'Immerse yourself in the eternal divine love and spiritual bliss of Shri Vrindavan Dham.'}
+        title="" // Removed
+        subtitle="" // Removed
       />
 
       {/* About Section */}
