@@ -93,18 +93,32 @@ export default function HeroCarousel({ images, title, subtitle, ctaText = 'Watch
           <div
             key={index}
             className={`carousel-slide ${index === currentIndex ? 'active' : ''}`}
-            style={{ opacity: index === currentIndex ? 1 : 0, transition: 'opacity 1s ease-in-out', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+            style={{ opacity: index === currentIndex ? 1 : 0, transition: 'opacity 1s ease-in-out', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'hidden' }}
           >
-            <Image
-              src={image}
-              alt={`Slide ${index + 1}`}
-              fill
-              style={{ objectFit: 'cover' }}
-              priority={index === 0} // Priority load first image
-              loading={index === 0 ? 'eager' : 'lazy'}
-            />
-            {/* Dark gradient overlay for better visibility if text was there, but kept for consistency/aesthetics */}
-            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2))' }}></div>
+            {/* Blurred Background Layer (Fills the screen) */}
+            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1 }}>
+              <Image
+                src={image}
+                alt="Background"
+                fill
+                style={{ objectFit: 'cover', filter: 'blur(20px)', transform: 'scale(1.1)' }}
+                quality={50}
+              />
+              {/* Dark overlay to ensure text readability if we add it back, and for aesthetics */}
+              <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.3)' }}></div>
+            </div>
+
+            {/* Main Image Layer (Fits the screen) */}
+            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 2 }}>
+              <Image
+                src={image}
+                alt={`Slide ${index + 1}`}
+                fill
+                style={{ objectFit: 'contain' }}
+                priority={index === 0}
+                loading={index === 0 ? 'eager' : 'lazy'}
+              />
+            </div>
           </div>
         ))}
       </div>
