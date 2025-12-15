@@ -34,19 +34,50 @@ export default async function Home() {
         subtitle="" // Removed
       />
 
-      {/* About Section */}
-      <section id="about">
+      {/* Upcoming Events Section */}
+      <section id="events" style={{ padding: '80px 0', background: '#fff' }}>
         <div className="container">
-          <h2 className="section-title">About Our Channel</h2>
-          <div style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
-            <p style={{ fontSize: '1.1rem', marginBottom: '1.5rem' }}>
-              "Vrindavan Ras Desh" is dedicated to sharing the divine essence (Ras) of Vrindavan. 
-              Our content focuses on the spiritual heritage, daily pastimes (Leelas), and the devotional atmosphere 
-              that makes Vrindavan the holiest of holy places.
-            </p>
-            <p>
-              Join us on a journey of devotion, sankirtan, and darshan of the sacred temples and groves of Vraja.
-            </p>
+          <h2 className="section-title">Upcoming Events</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+            {/* Placeholder Event 1 */}
+            <div style={{ border: '1px solid #eee', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 5px 15px rgba(0,0,0,0.05)' }}>
+              <div style={{ height: '200px', background: '#f5f5f5', position: 'relative' }}>
+                <img src="https://images.unsplash.com/photo-1514533450685-4493e01d1fdc?q=80&w=1000&auto=format&fit=crop" alt="Event" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <div style={{ position: 'absolute', top: '10px', right: '10px', background: '#fff', padding: '5px 10px', borderRadius: '5px', fontWeight: 'bold', fontSize: '0.9rem' }}>
+                  DEC 25
+                </div>
+              </div>
+              <div style={{ padding: '1.5rem' }}>
+                <h3 style={{ marginBottom: '0.5rem', fontSize: '1.2rem' }}>Special Kirtan Event</h3>
+                <p style={{ color: '#666', marginBottom: '1rem', fontSize: '0.9rem' }}>Join us for a divine evening of congregational chanting.</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.85rem', color: '#888' }}><i className="fas fa-map-marker-alt"></i> Vrindavan</span>
+                  <a href="#" style={{ color: 'var(--primary-color)', fontWeight: '600', fontSize: '0.9rem' }}>Details &rarr;</a>
+                </div>
+              </div>
+            </div>
+             {/* Placeholder Event 2 */}
+             <div style={{ border: '1px solid #eee', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 5px 15px rgba(0,0,0,0.05)' }}>
+              <div style={{ height: '200px', background: '#f5f5f5', position: 'relative' }}>
+                <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1000&auto=format&fit=crop" alt="Event" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <div style={{ position: 'absolute', top: '10px', right: '10px', background: '#fff', padding: '5px 10px', borderRadius: '5px', fontWeight: 'bold', fontSize: '0.9rem' }}>
+                  JAN 01
+                </div>
+              </div>
+              <div style={{ padding: '1.5rem' }}>
+                <h3 style={{ marginBottom: '0.5rem', fontSize: '1.2rem' }}>New Year Celebration</h3>
+                <p style={{ color: '#666', marginBottom: '1rem', fontSize: '0.9rem' }}>Start the new year with blessings and spiritual vibes.</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.85rem', color: '#888' }}><i className="fas fa-map-marker-alt"></i> Temple Hall</span>
+                  <a href="#" style={{ color: 'var(--primary-color)', fontWeight: '600', fontSize: '0.9rem' }}>Details &rarr;</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+             <Link href="/about" className="cta-button" style={{ background: 'transparent', border: '2px solid var(--primary-color)', color: 'var(--primary-color)' }}>
+                Read Our Story
+             </Link>
           </div>
         </div>
       </section>

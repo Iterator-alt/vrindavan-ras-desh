@@ -39,7 +39,7 @@ export default async function AdminDashboard() {
           {/* Site Settings */}
           <div style={{ border: '1px solid #eee', padding: '1.5rem', borderRadius: '8px' }}>
             <h3><i className="fas fa-cog" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Site Settings</h3>
-            <p style={{ marginBottom: '1rem', color: '#666' }}>Update contact info and links.</p>
+            <p style={{ marginBottom: '1rem', color: '#666' }}>Update hero images, videos, and social links.</p>
             <Link href="/admin/settings" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>Manage Settings</Link>
           </div>
 
@@ -48,6 +48,13 @@ export default async function AdminDashboard() {
             <h3><i className="fas fa-box" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Order Management</h3>
             <p style={{ marginBottom: '1rem', color: '#666' }}>View and manage customer orders.</p>
             <Link href="/admin/orders" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>View Orders</Link>
+          </div>
+
+          {/* Event Management */}
+          <div style={{ border: '1px solid #eee', padding: '1.5rem', borderRadius: '8px' }}>
+            <h3><i className="fas fa-calendar-alt" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Event Management</h3>
+            <p style={{ marginBottom: '1rem', color: '#666' }}>Add and update upcoming events.</p>
+            <Link href="/admin/events" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>Manage Events</Link>
           </div>
 
           {/* User Management (Superadmin Only) */}

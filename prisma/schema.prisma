@@ -47,6 +47,7 @@ model SiteSettings {
   heroImageUrl3  String?
   heroImageUrl4  String?
   heroImages     String[]  @default([])
+  aboutImages    String[]  @default([])
   videoUrl1      String?
   videoTitle1    String?
   videoUrl2      String?
@@ -57,6 +58,19 @@ model SiteSettings {
   instagramPost2 String?
   instagramPost3 String?
   facebookUrl    String?
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  date        DateTime
+  location    String?
+  imageUrl    String?
+  link        String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 // E-Commerce Models

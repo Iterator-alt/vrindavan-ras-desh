@@ -109,6 +109,11 @@ export default function SettingsPage() {
           ...prev,
           heroImages: [...((prev as any).heroImages || []), newBlob.url]
         }));
+      } else if (activeField === 'aboutImages') {
+        setFormData(prev => ({
+          ...prev,
+          aboutImages: [...((prev as any).aboutImages || []), newBlob.url]
+        }));
       } else {
         setFormData(prev => ({ ...prev, [activeField]: newBlob.url }));
       }
@@ -254,6 +259,100 @@ export default function SettingsPage() {
           <p style={{ fontSize: '0.8rem', color: '#888', marginTop: '5px' }}>
             Upload from computer or paste URL. Drag to reorder (coming soon).
           </p>
+        </div>
+
+        {/* About Images */}
+        <div style={{ marginBottom: '2rem', borderTop: '1px solid #eee', paddingTop: '2rem' }}>
+          <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 'bold' }}>
+            About Page Images (Max 20)
+          </label>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
+            {/* Existing Images */}
+            {(formData as any).aboutImages?.map((img: string, index: number) => (
+              <div key={index} style={{ position: 'relative', aspectRatio: '16/9', border: '1px solid #ddd', borderRadius: '5px', overflow: 'hidden' }}>
+                <img src={img} alt={`About ${index + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newImages = [...((formData as any).aboutImages || [])];
+                    newImages.splice(index, 1);
+                    setFormData(prev => ({ ...prev, aboutImages: newImages }));
+                  }}
+                  style={{
+                    position: 'absolute',
+                    top: '5px',
+                    right: '5px',
+                    background: 'rgba(255,0,0,0.8)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: '24px',
+                    height: '24px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '14px'
+                  }}
+                >
+                  ×
+                </button>
+                <div style={{ position: 'absolute', bottom: '5px', left: '5px', background: 'rgba(0,0,0,0.5)', color: 'white', padding: '2px 6px', borderRadius: '3px', fontSize: '10px' }}>
+                  {index + 1}
+                </div>
+              </div>
+            ))}
+
+            {/* Add New Button */}
+            {((formData as any).aboutImages?.length || 0) < 20 && (
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveField('aboutImages');
+                  fileInputRef.current?.click();
+                }}
+                disabled={uploading}
+                style={{
+                  aspectRatio: '16/9',
+                  border: '2px dashed #ddd',
+                  borderRadius: '5px',
+                  background: '#f9f9f9',
+                  cursor: uploading ? 'wait' : 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#666'
+                }}
+              >
+                <span style={{ fontSize: '24px', marginBottom: '5px' }}>+</span>
+                <span style={{ fontSize: '12px' }}>{uploading && activeField === 'aboutImages' ? 'Uploading...' : 'Add Image'}</span>
+              </button>
+            )}
+          </div>
+
+          {/* URL Input for About Images */}
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <input
+              type="text"
+              placeholder="Or paste image URL and press Enter"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  const val = e.currentTarget.value.trim();
+                  if (val) {
+                    setFormData(prev => ({
+                      ...prev,
+                      aboutImages: [...((prev as any).aboutImages || []), val]
+                    }));
+                    e.currentTarget.value = '';
+                  }
+                }
+              }}
+              style={{ flex: 1, padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }}
+            />
+          </div>
         </div>
         
         <input

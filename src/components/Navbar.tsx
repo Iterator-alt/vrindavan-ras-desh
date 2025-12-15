@@ -18,11 +18,32 @@ export default function Navbar() {
                 </div>
                 <ul className={`nav-links ${isOpen ? 'active' : ''}`}>
                     <li><Link href="/#home" onClick={() => setIsOpen(false)}>Home</Link></li>
-                    <li><Link href="/#about" onClick={() => setIsOpen(false)}>About</Link></li>
+                    <li><Link href="/about" onClick={() => setIsOpen(false)}>About</Link></li>
                     <li><Link href="/shop" onClick={() => setIsOpen(false)}>Shop</Link></li>
                     <li><Link href="/#videos" onClick={() => setIsOpen(false)}>Videos</Link></li>
                     <li><Link href="/blog" onClick={() => setIsOpen(false)}>Blog</Link></li>
                     <li><Link href="/#contact" onClick={() => setIsOpen(false)}>Contact</Link></li>
+                    
+                    {/* Donate Button */}
+                    <li>
+                        <a 
+                          href="https://rzp.io/l/donate-placeholder" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="cta-button"
+                          style={{ 
+                            padding: '8px 20px', 
+                            fontSize: '0.9rem',
+                            textDecoration: 'none',
+                            marginLeft: '10px',
+                            display: 'inline-block'
+                          }}
+                          onClick={() => setIsOpen(false)}
+                        >
+                          Donate
+                        </a>
+                    </li>
+
                     {session ? (
                         <li><Link href="/admin" onClick={() => setIsOpen(false)} style={{ color: 'var(--primary-color)', fontWeight: 'bold' }}>Admin</Link></li>
                     ) : (
