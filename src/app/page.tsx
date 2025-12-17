@@ -44,7 +44,7 @@ export default async function Home() {
       <section id="events" style={{ padding: '80px 0', background: '#fff' }}>
         <div className="container">
           <h2 className="section-title">Upcoming Events</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
             {events.length === 0 ? (
               <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '2rem', color: '#666' }}>
                 <p>No upcoming events at the moment. Stay tuned!</p>
