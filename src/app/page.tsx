@@ -50,37 +50,79 @@ export default async function Home() {
                 <p>No upcoming events at the moment. Stay tuned!</p>
               </div>
             ) : (
-              events.map((event) => (
-                <div key={event.id} style={{ border: '1px solid #eee', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 5px 15px rgba(0,0,0,0.05)' }}>
-                  <div style={{ height: '200px', background: '#f5f5f5', position: 'relative' }}>
-                    {event.imageUrl ? (
-                      <img src={event.imageUrl} alt={event.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    ) : (
-                      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ccc' }}>
-                        <i className="fas fa-calendar-alt" style={{ fontSize: '3rem' }}></i>
-                      </div>
-                    )}
-                    <div style={{ position: 'absolute', top: '10px', right: '10px', background: '#fff', padding: '5px 10px', borderRadius: '5px', fontWeight: 'bold', fontSize: '0.9rem' }}>
-                      {new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                    </div>
-                  </div>
-                  <div style={{ padding: '1.5rem' }}>
-                    <h3 style={{ marginBottom: '0.5rem', fontSize: '1.2rem' }}>{event.title}</h3>
-                    <p style={{ color: '#666', marginBottom: '1rem', fontSize: '0.9rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                      {event.description}
-                    </p>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: '0.85rem', color: '#888' }}>
-                        <i className="fas fa-map-marker-alt" style={{ marginRight: '5px' }}></i>
-                        {event.location}
-                      </span>
-                      {event.link && (
-                        <a href={event.link} target="_blank" style={{ color: 'var(--primary-color)', fontWeight: '600', fontSize: '0.9rem' }}>Details &rarr;</a>
+              events.map((event) => {
+                const EventCard = (
+                  <div style={{ height: '100%', border: '1px solid #eee', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 5px 15px rgba(0,0,0,0.05)', transition: 'transform 0.3s ease', cursor: event.link ? 'pointer' : 'default' }}>
+                    <div style={{ height: '200px', background: '#000', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      {event.imageUrl ? (
+                        <>
+                          {/* Blurred Background Layer */}
+                          <div 
+                            style={{ 
+                              position: 'absolute', 
+                              top: 0, 
+                              left: 0, 
+                              width: '100%', 
+                              height: '100%', 
+                              backgroundImage: `url(${event.imageUrl})`, 
+                              backgroundSize: 'cover', 
+                              backgroundPosition: 'center', 
+                              filter: 'blur(10px) brightness(0.5)',
+                              opacity: 0.8
+                            }} 
+                          />
+                          {/* Main Image Layer */}
+                          <img 
+                            src={event.imageUrl} 
+                            alt={event.title} 
+                            style={{ 
+                              position: 'relative', 
+                              maxWidth: '100%', 
+                              maxHeight: '100%', 
+                              objectFit: 'contain', 
+                              zIndex: 1 
+                            }} 
+                          />
+                        </>
+                      ) : (
+                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ccc', background: '#f5f5f5' }}>
+                          <i className="fas fa-calendar-alt" style={{ fontSize: '3rem' }}></i>
+                        </div>
                       )}
+                      <div style={{ position: 'absolute', top: '10px', right: '10px', background: '#fff', padding: '5px 10px', borderRadius: '5px', fontWeight: 'bold', fontSize: '0.9rem', zIndex: 2 }}>
+                        {new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                      </div>
+                    </div>
+                    <div style={{ padding: '1.5rem', background: 'white' }}>
+                      <h3 style={{ marginBottom: '0.5rem', fontSize: '1.2rem', color: 'var(--primary-color)' }}>{event.title}</h3>
+                      <p style={{ color: '#666', marginBottom: '1rem', fontSize: '0.9rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                        {event.description}
+                      </p>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.85rem', color: '#888' }}>
+                          <i className="fas fa-map-marker-alt" style={{ marginRight: '5px' }}></i>
+                          {event.location}
+                        </span>
+                        {event.link && (
+                          <span style={{ color: 'var(--primary-color)', fontWeight: '600', fontSize: '0.9rem' }}>Details &rarr;</span>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
+                );
+
+                return (
+                  <div key={event.id} className="event-card-wrapper">
+                    {event.link ? (
+                      <a href={event.link} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit', display: 'block', height: '100%' }}>
+                        {EventCard}
+                      </a>
+                    ) : (
+                      EventCard
+                    )}
+                  </div>
+                );
+              })
             )}
           </div>
           <div style={{ textAlign: 'center', marginTop: '3rem' }}>
