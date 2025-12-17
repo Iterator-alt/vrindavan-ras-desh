@@ -7,11 +7,12 @@ import { generateSlug } from '@/lib/shop-utils';
 // GET /api/products/[id] - Get single product
 export async function GET(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await params;
         const product = await prisma.product.findUnique({
-            where: { id: params.id },
+            where: { id },
             include: {
                 category: true,
             },
@@ -31,9 +32,10 @@ export async function GET(
 // PUT /api/products/[id] - Update product (admin only)
 export async function PUT(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await params;
         const session = await getServerSession(authOptions);
 
         if (!session || (session.user?.role !== 'ADMIN' && session.user?.role !== 'SUPERADMIN')) {
@@ -55,7 +57,7 @@ export async function PUT(
 
         // Check if product exists
         const existingProduct = await prisma.product.findUnique({
-            where: { id: params.id },
+            where: { id },
         });
 
         if (!existingProduct) {
@@ -71,7 +73,7 @@ export async function PUT(
             const slugConflict = await prisma.product.findFirst({
                 where: {
                     slug,
-                    id: { not: params.id },
+                    id: { not: id },
                 },
             });
 
@@ -85,7 +87,7 @@ export async function PUT(
 
         // Update product
         const product = await prisma.product.update({
-            where: { id: params.id },
+            where: { id },
             data: {
                 ...(name && { name, slug }),
                 ...(description !== undefined && { description }),
@@ -114,9 +116,10 @@ export async function PUT(
 // DELETE /api/products/[id] - Delete product (admin only)
 export async function DELETE(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await params;
         const session = await getServerSession(authOptions);
 
         if (!session || (session.user?.role !== 'ADMIN' && session.user?.role !== 'SUPERADMIN')) {
@@ -125,7 +128,7 @@ export async function DELETE(
 
         // Check if product exists
         const product = await prisma.product.findUnique({
-            where: { id: params.id },
+            where: { id },
         });
 
         if (!product) {
@@ -134,7 +137,7 @@ export async function DELETE(
 
         // Delete product
         await prisma.product.delete({
-            where: { id: params.id },
+            where: { id },
         });
 
         return NextResponse.json({ message: 'Product deleted successfully' });
