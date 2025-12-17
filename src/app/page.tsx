@@ -130,7 +130,7 @@ export default async function Home() {
           <h2 className="section-title">Daily Darshan (Instagram)</h2>
           <div style={{ textAlign: 'center' }}>
             <p style={{ marginBottom: '2rem' }}>Follow our daily updates on Instagram.</p>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap', alignItems: 'flex-start' }}>
               {settings?.instagramPost1 && (
                 <div style={{ width: '100%', maxWidth: '350px' }}>
                   <InstagramEmbed postUrl={settings.instagramPost1} />

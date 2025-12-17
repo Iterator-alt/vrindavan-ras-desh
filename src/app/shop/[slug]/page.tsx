@@ -9,10 +9,11 @@ export const revalidate = 60;
 export default async function ProductPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
   const product = await prisma.product.findUnique({
-    where: { slug: params.slug },
+    where: { slug },
     include: {
       category: true,
     },

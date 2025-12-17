@@ -11,9 +11,9 @@ interface SearchParams {
 export default async function ShopPage({
   searchParams,
 }: {
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }) {
-  const categorySlug = searchParams.category;
+  const { category: categorySlug } = await searchParams;
 
   // Fetch categories
   const categories = await prisma.category.findMany({

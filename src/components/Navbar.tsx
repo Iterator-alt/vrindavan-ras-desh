@@ -16,7 +16,7 @@ export default function Navbar() {
                 <div className="mobile-menu-btn" onClick={() => setIsOpen(!isOpen)}>
                     <i className="fas fa-bars"></i>
                 </div>
-                <ul className={`nav-links ${isOpen ? 'active' : ''}`}>
+                <ul className={`nav-links ${isOpen ? 'active' : ''}`} style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
                     <li><Link href="/#home" onClick={() => setIsOpen(false)}>Home</Link></li>
                     <li><Link href="/about" onClick={() => setIsOpen(false)}>About</Link></li>
                     <li><Link href="/shop" onClick={() => setIsOpen(false)}>Shop</Link></li>
