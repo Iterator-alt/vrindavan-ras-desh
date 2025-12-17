@@ -252,7 +252,7 @@ export default function ProductsManagementPage() {
             </div>
 
             {/* Price and Discount Price */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+            <div className="responsive-grid-2">
               <div>
                 <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>
                   Price (₹) *
@@ -285,7 +285,7 @@ export default function ProductsManagementPage() {
             </div>
 
             {/* Category and Stock */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+            <div className="responsive-grid-2">
               <div>
                 <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>
                   Category *

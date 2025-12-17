@@ -197,7 +197,7 @@ export default function AdminOrdersPage() {
               Order Details: {selectedOrder.orderNumber}
             </h2>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
+            <div className="responsive-grid-2">
               <div>
                 <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Customer Info</h3>
                 <p><strong>Name:</strong> {selectedOrder.customerName}</p>
