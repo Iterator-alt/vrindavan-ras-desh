@@ -35,25 +35,16 @@ export default function CartPage() {
       <div className="container">
         <h1 className="section-title">Shopping Cart</h1>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '3rem' }}>
+        <div className="cart-layout">
           {/* Cart Items */}
           <div>
             {items.map((item) => (
               <div
                 key={item.productId}
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '120px 1fr auto',
-                  gap: '1.5rem',
-                  padding: '1.5rem',
-                  background: 'white',
-                  borderRadius: '12px',
-                  marginBottom: '1rem',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                }}
+                className="cart-item-grid"
               >
                 {/* Product Image */}
-                <div style={{ width: '120px', height: '120px', borderRadius: '8px', overflow: 'hidden', background: '#f5f5f5' }}>
+                <div className="cart-item-image">
                   {item.image ? (
                     <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   ) : (
@@ -65,42 +56,48 @@ export default function CartPage() {
 
                 {/* Product Info */}
                 <div>
-                  <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>{item.name}</h3>
-                  <div style={{ fontSize: '1.3rem', fontWeight: '700', color: 'var(--primary-color)', marginBottom: '1rem' }}>
+                  <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>{item.name}</h3>
+                  <div style={{ fontSize: '1.2rem', fontWeight: '700', color: 'var(--primary-color)', marginBottom: '0.5rem' }}>
                     {formatPrice(item.price)}
                   </div>
 
                   {/* Quantity Controls */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <span style={{ fontSize: '0.9rem', color: '#666' }}>Quantity:</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                    <span style={{ fontSize: '0.85rem', color: '#666' }}>Qty:</span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <button
                         onClick={() => updateQuantity(item.productId, item.quantity - 1)}
                         style={{
-                          width: '32px',
-                          height: '32px',
+                          width: '28px',
+                          height: '28px',
                           border: '1px solid #ddd',
                           background: 'white',
                           borderRadius: '6px',
                           cursor: 'pointer',
                           fontSize: '1rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
                         }}
                       >
                         −
                       </button>
-                      <span style={{ minWidth: '30px', textAlign: 'center', fontWeight: '600' }}>
+                      <span style={{ minWidth: '24px', textAlign: 'center', fontWeight: '600', fontSize: '0.9rem' }}>
                         {item.quantity}
                       </span>
                       <button
                         onClick={() => updateQuantity(item.productId, item.quantity + 1)}
                         style={{
-                          width: '32px',
-                          height: '32px',
+                          width: '28px',
+                          height: '28px',
                           border: '1px solid #ddd',
                           background: 'white',
                           borderRadius: '6px',
                           cursor: 'pointer',
                           fontSize: '1rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
                         }}
                       >
                         +
@@ -110,7 +107,10 @@ export default function CartPage() {
                 </div>
 
                 {/* Remove Button & Subtotal */}
-                <div style={{ textAlign: 'right' }}>
+                <div className="cart-item-actions">
+                  <div style={{ fontSize: '1.2rem', fontWeight: '700', marginBottom: '0.5rem' }}>
+                    {formatPrice(item.price * item.quantity)}
+                  </div>
                   <button
                     onClick={() => removeItem(item.productId)}
                     style={{
@@ -118,16 +118,15 @@ export default function CartPage() {
                       border: 'none',
                       color: '#e74c3c',
                       cursor: 'pointer',
-                      fontSize: '1.5rem',
-                      marginBottom: '1rem',
+                      fontSize: '0.9rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      marginLeft: 'auto' // Pushes to right in desktop, overridden in mobile if needed
                     }}
-                    title="Remove item"
                   >
-                    <i className="fas fa-trash"></i>
+                    <i className="fas fa-trash"></i> Remove
                   </button>
-                  <div style={{ fontSize: '1.3rem', fontWeight: '700' }}>
-                    {formatPrice(item.price * item.quantity)}
-                  </div>
                 </div>
               </div>
             ))}
