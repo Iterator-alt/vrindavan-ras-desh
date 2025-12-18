@@ -3,11 +3,13 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import MiniCart from './MiniCart';
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const { data: session } = useSession();
+    const router = useRouter();
 
     return (
         <nav className="navbar">
@@ -45,7 +47,34 @@ export default function Navbar() {
                     </li>
 
                     {session ? (
-                        <li><Link href="/admin" onClick={() => setIsOpen(false)} style={{ color: 'var(--primary-color)', fontWeight: 'bold' }}>Admin</Link></li>
+                        <li style={{ position: 'relative' }}>
+                            <button 
+                                onClick={() => router.push('/profile')}
+                                style={{ 
+                                    background: 'none', 
+                                    border: 'none', 
+                                    cursor: 'pointer', 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    gap: '8px',
+                                    fontSize: '1rem',
+                                    fontFamily: 'inherit',
+                                    color: 'var(--text-color)'
+                                }}
+                            >
+                                {session.user?.image ? (
+                                    <img 
+                                        src={session.user.image} 
+                                        alt={session.user.name || 'User'} 
+                                        style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }} 
+                                    />
+                                ) : (
+                                    <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--primary-color)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+                                        {session.user?.name?.[0] || session.user?.email?.[0] || 'U'}
+                                    </div>
+                                )}
+                            </button>
+                        </li>
                     ) : (
                         <li><Link href="/login" onClick={() => setIsOpen(false)} style={{ color: 'var(--primary-color)', fontWeight: 'bold' }}>Login</Link></li>
                     )}
