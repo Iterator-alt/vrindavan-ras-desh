@@ -619,9 +619,3 @@ footer {
         text-align: left;
     }
 }
-
-@media (max-width: 768px) {
-    .profile-layout {
-        grid-template-columns: 1fr !important;
-    }
-}
