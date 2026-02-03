@@ -1,5 +1,7 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { prisma } from '@/lib/prisma'
 import './donate.css'
 
 interface SewaOption {
@@ -12,15 +14,70 @@ interface SewaOption {
   isActive: boolean
 }
 
-export default async function DonatePage() {
-  const settings = await prisma.donationSettings.findUnique({
-    where: { id: 'default' }
-  })
+interface DonationSettings {
+  donationPageUrl: string | null
+  sewaOptions: SewaOption[]
+  pageTitle: string
+  pageSubtitle: string
+  pageDescription: string | null
+  heroImage: string | null
+  isEnabled: boolean
+}
 
-  if (!settings || !settings.isEnabled) {
+export default function DonatePage() {
+  const [loading, setLoading] = useState(true)
+  const [settings, setSettings] = useState<DonationSettings | null>(null)
+  const [error, setError] = useState(false)
+
+  useEffect(() => {
+    fetchSettings()
+  }, [])
+
+  const fetchSettings = async () => {
+    try {
+      const res = await fetch('/api/donation-settings')
+      if (res.ok) {
+        const data = await res.json()
+        setSettings(data)
+      } else {
+        setError(true)
+      }
+    } catch (err) {
+      console.error('Error fetching donation settings:', err)
+      setError(true)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleSevaClick = (seva: SewaOption) => {
+    const isDevelopment = process.env.NODE_ENV === 'development'
+    const externalUrl = settings?.donationPageUrl
+
+    if (isDevelopment || !externalUrl) {
+      // In development or no external URL, show alert
+      alert(`Selected: ${seva.title}\nAmount: ₹${seva.amount}\n\nIn production, this will redirect to the payment gateway.`)
+    } else {
+      // In production with external URL, redirect
+      const url = `${externalUrl}?seva=${seva.id}&amount=${seva.amount}&title=${encodeURIComponent(seva.title)}`
+      window.location.href = url
+    }
+  }
+
+  if (loading) {
     return (
       <div className="donate-page">
-        <div className="container">
+        <div className="container" style={{ paddingTop: '120px', textAlign: 'center' }}>
+          <p>Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error || !settings || !settings.isEnabled) {
+    return (
+      <div className="donate-page">
+        <div className="container" style={{ paddingTop: '120px', textAlign: 'center' }}>
           <h1>Donation page is currently unavailable</h1>
           <Link href="/">Return to Home</Link>
         </div>
@@ -28,12 +85,7 @@ export default async function DonatePage() {
     )
   }
 
-  const sewaOptions = (settings.sewaOptions as SewaOption[]) || []
-  const activeSewaOptions = sewaOptions.filter(option => option.isActive)
-
-  // Determine if we should redirect to external URL
-  const isDevelopment = process.env.NODE_ENV === 'development'
-  const externalUrl = settings.donationPageUrl
+  const activeSewaOptions = settings.sewaOptions.filter(option => option.isActive)
 
   return (
     <div className="donate-page">
@@ -70,16 +122,7 @@ export default async function DonatePage() {
                 <div className="seva-amount">₹{seva.amount.toLocaleString('en-IN')}</div>
                 <button
                   className="seva-button"
-                  onClick={() => {
-                    if (isDevelopment || !externalUrl) {
-                      // In development or no external URL, show alert
-                      alert(`Selected: ${seva.title}\nAmount: ₹${seva.amount}\n\nIn production, this will redirect to the payment gateway.`)
-                    } else {
-                      // In production with external URL, redirect
-                      const url = `${externalUrl}?seva=${seva.id}&amount=${seva.amount}&title=${encodeURIComponent(seva.title)}`
-                      window.location.href = url
-                    }
-                  }}
+                  onClick={() => handleSevaClick(seva)}
                 >
                   Offer Seva
                 </button>
