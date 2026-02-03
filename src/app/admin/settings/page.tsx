@@ -45,6 +45,9 @@ export default function SettingsPage() {
     instagramPost2: '',
     instagramPost3: '',
     facebookUrl: '',
+    paymentQRCode: '',
+    upiId: '',
+    paymentInstructions: '',
   });
 
   useEffect(() => {
@@ -86,8 +89,25 @@ export default function SettingsPage() {
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.[0]) return;
 
-    setUploading(true);
     const file = e.target.files[0];
+    
+    // Client-side validation
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
+    
+    if (file.size > maxSize) {
+      alert(`File size too large! Maximum size is 10MB. Your file is ${(file.size / 1024 / 1024).toFixed(2)}MB`);
+      e.target.value = ''; // Reset input
+      return;
+    }
+    
+    if (!allowedTypes.includes(file.type)) {
+      alert(`Invalid file type! Allowed types: JPG, PNG, GIF, WebP, SVG. Your file type: ${file.type}`);
+      e.target.value = ''; // Reset input
+      return;
+    }
+
+    setUploading(true);
 
     try {
       const response = await fetch(
@@ -99,7 +119,8 @@ export default function SettingsPage() {
       );
 
       if (!response.ok) {
-        throw new Error('Upload failed');
+        const error = await response.json();
+        throw new Error(error.error || 'Upload failed');
       }
 
       const newBlob = await response.json();
@@ -117,9 +138,13 @@ export default function SettingsPage() {
       } else {
         setFormData(prev => ({ ...prev, [activeField]: newBlob.url }));
       }
-    } catch (error) {
+      
+      // Reset input
+      e.target.value = '';
+    } catch (error: any) {
       console.error('Error uploading file:', error);
-      alert('Failed to upload image. Please try again.');
+      alert(`Failed to upload image: ${error.message || 'Please try again.'}`);
+      e.target.value = ''; // Reset input
     } finally {
       setUploading(false);
     }
@@ -359,10 +384,10 @@ export default function SettingsPage() {
           type="file"
           ref={fileInputRef}
           onChange={handleFileUpload}
-          accept="image/*"
+          accept=".jpg,.jpeg,.png,.gif,.webp,.svg,image/jpeg,image/png,image/gif,image/webp,image/svg+xml"
           style={{ display: 'none' }}
         />
-        <p style={{ fontSize: '0.8rem', color: '#888', marginTop: '5px' }}>Paste a direct link or upload an image.</p>
+        <p style={{ fontSize: '0.8rem', color: '#888', marginTop: '5px' }}>Supported: JPG, PNG, GIF, WebP, SVG (Max 10MB)</p>
 
         {/* Videos */}
         <h3 style={{ borderBottom: '1px solid #eee', paddingBottom: '10px', marginBottom: '20px', marginTop: '40px' }}>Featured Videos</h3>
@@ -418,6 +443,47 @@ export default function SettingsPage() {
         <div className="form-group" style={{ marginBottom: '1.5rem' }}>
           <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Facebook Profile URL</label>
           <input type="text" name="facebookUrl" value={formData.facebookUrl || ''} onChange={handleChange} style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
+        </div>
+
+        {/* Payment Settings */}
+        <h3 style={{ borderBottom: '1px solid #eee', paddingBottom: '10px', marginBottom: '20px', marginTop: '40px' }}>Payment Settings (QR Code)</h3>
+        
+        <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>UPI ID (Optional)</label>
+          <input type="text" name="upiId" value={(formData as any).upiId || ''} onChange={handleChange} placeholder="e.g. business@upi" style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
+        </div>
+
+        <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Payment Instructions</label>
+          <textarea name="paymentInstructions" value={(formData as any).paymentInstructions || ''} onChange={handleChange} placeholder="Instructions for the user..." rows={3} style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }} />
+        </div>
+
+        <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Payment QR Code Image</label>
+          
+          {(formData as any).paymentQRCode ? (
+            <div style={{ position: 'relative', width: '200px', marginBottom: '10px' }}>
+              <img src={(formData as any).paymentQRCode} alt="Payment QR" style={{ width: '100%', borderRadius: '5px', border: '1px solid #ddd' }} />
+              <button
+                type="button"
+                onClick={() => setFormData(prev => ({ ...prev, paymentQRCode: '' }))}
+                style={{ position: 'absolute', top: '5px', right: '5px', background: 'rgba(255,0,0,0.8)', color: 'white', border: 'none', borderRadius: '50%', width: '24px', height: '24px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              >
+                ×
+              </button>
+            </div>
+          ) : (
+            <div 
+              onClick={() => {
+                setActiveField('paymentQRCode');
+                fileInputRef.current?.click();
+              }}
+              style={{ width: '200px', height: '200px', border: '2px dashed #ddd', borderRadius: '5px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: '#f9f9f9' }}
+            >
+              <span style={{ fontSize: '24px', color: '#888' }}>+</span>
+              <span style={{ fontSize: '12px', color: '#888', marginTop: '5px' }}>Upload QR Code</span>
+            </div>
+          )}
         </div>
 
         <button type="submit" className="cta-button" disabled={saving} style={{ width: '100%', border: 'none', cursor: saving ? 'wait' : 'pointer', marginTop: '20px' }}>

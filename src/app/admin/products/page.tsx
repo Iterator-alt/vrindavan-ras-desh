@@ -82,8 +82,25 @@ export default function ProductsManagementPage() {
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.[0]) return;
 
-    setUploading(true);
     const file = e.target.files[0];
+    
+    // Client-side validation
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
+    
+    if (file.size > maxSize) {
+      alert(`File size too large! Maximum size is 10MB. Your file is ${(file.size / 1024 / 1024).toFixed(2)}MB`);
+      e.target.value = '';
+      return;
+    }
+    
+    if (!allowedTypes.includes(file.type)) {
+      alert(`Invalid file type! Allowed types: JPG, PNG, GIF, WebP, SVG. Your file type: ${file.type}`);
+      e.target.value = '';
+      return;
+    }
+
+    setUploading(true);
 
     try {
       const response = await fetch(
@@ -94,16 +111,21 @@ export default function ProductsManagementPage() {
         }
       );
 
-      if (!response.ok) throw new Error('Upload failed');
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Upload failed');
+      }
 
       const newBlob = await response.json();
       setFormData(prev => ({
         ...prev,
         images: [...prev.images, newBlob.url],
       }));
-    } catch (error) {
+      e.target.value = '';
+    } catch (error: any) {
       console.error('Error uploading image:', error);
-      alert('Failed to upload image. Please try again.');
+      alert(`Failed to upload image: ${error.message || 'Please try again.'}`);
+      e.target.value = '';
     } finally {
       setUploading(false);
     }
@@ -377,13 +399,13 @@ export default function ProductsManagementPage() {
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept="image/*"
+                  accept=".jpg,.jpeg,.png,.gif,.webp,.svg,image/jpeg,image/png,image/gif,image/webp,image/svg+xml"
                   onChange={handleImageUpload}
                   style={{ display: 'none' }}
                 />
               </div>
               <p style={{ fontSize: '0.85rem', color: '#666' }}>
-                Click + to upload from computer, or paste image URL above
+                Supported: JPG, PNG, GIF, WebP, SVG (Max 10MB)
               </p>
             </div>
 

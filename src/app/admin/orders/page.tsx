@@ -231,8 +231,49 @@ export default function AdminOrdersPage() {
               ))}
             </div>
 
-            <div style={{ textAlign: 'right', fontSize: '1.2rem', fontWeight: '700' }}>
-              Total: {formatPrice(selectedOrder.total)}
+            <div style={{ textAlign: 'right', marginTop: '2rem', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '1rem' }}>
+              <div style={{ fontSize: '1.2rem', fontWeight: '700' }}>
+                Total: {formatPrice(selectedOrder.total)}
+              </div>
+            </div>
+
+            {/* Admin Actions */}
+            <div style={{ marginTop: '2rem', paddingTop: '1rem', borderTop: '1px solid #eee', display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+               {selectedOrder.paymentStatus !== 'paid' && (
+                 <button
+                   onClick={async () => {
+                     if (!confirm('Are you sure you want to mark this orderc as PAID? This will send a confirmation email to the customer.')) return;
+                     
+                     try {
+                        const res = await fetch(`/api/orders/${selectedOrder.id}`, {
+                          method: 'PUT',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ paymentStatus: 'paid' }),
+                        });
+                        
+                        if (!res.ok) throw new Error('Failed to update');
+                        
+                        alert('Order marked as PAID');
+                        setSelectedOrder(null);
+                        fetchOrders();
+                     } catch (err) {
+                       alert('Failed to update order');
+                       console.error(err);
+                     }
+                   }}
+                   style={{
+                     padding: '10px 20px',
+                     background: '#28a745',
+                     color: 'white',
+                     border: 'none',
+                     borderRadius: '5px',
+                     cursor: 'pointer',
+                     fontWeight: '600'
+                   }}
+                 >
+                   Mark as Paid
+                 </button>
+               )}
             </div>
           </div>
         </div>

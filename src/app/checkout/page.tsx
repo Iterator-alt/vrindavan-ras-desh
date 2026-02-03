@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { useCartStore } from '@/lib/cart-store';
 import { formatPrice } from '@/lib/shop-utils';
+import Image from 'next/image';
 
 interface CheckoutForm {
   customerName: string;
@@ -21,6 +22,9 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { items, getTotalPrice, clearCart } = useCartStore();
   const [processing, setProcessing] = useState(false);
+  const [showQRModal, setShowQRModal] = useState(false);
+  const [createdOrder, setCreatedOrder] = useState<any>(null);
+  const [settings, setSettings] = useState<any>(null);
 
   const {
     register,
@@ -33,7 +37,15 @@ export default function CheckoutPage() {
   const tax = total * 0.18;
   const grandTotal = total + shipping + tax;
 
-  if (items.length === 0) {
+  useEffect(() => {
+    // Fetch site settings for QR code
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => setSettings(data))
+      .catch(err => console.error('Error fetching settings:', err));
+  }, []);
+
+  if (items.length === 0 && !createdOrder) {
     router.push('/cart');
     return null;
   }
@@ -65,13 +77,10 @@ export default function CheckoutPage() {
       }
 
       const order = await orderResponse.json();
-
-      // For now, we'll just simulate payment success
-      // In production, you would integrate with Razorpay here
-      alert('Order placed successfully! Order ID: ' + order.orderNumber);
+      setCreatedOrder(order);
+      setShowQRModal(true);
       
-      clearCart();
-      router.push(`/order-confirmation?orderId=${order.id}`);
+      // Don't clear cart yet, wait for user to confirm payment or close modal
     } catch (error) {
       console.error('Checkout error:', error);
       alert('Failed to place order. Please try again.');
@@ -80,15 +89,137 @@ export default function CheckoutPage() {
     }
   };
 
+  const handlePaymentConfirmation = async () => {
+    if (!createdOrder) return;
+    setProcessing(true);
+
+    try {
+      // Update order status
+      const res = await fetch(`/api/orders/${createdOrder.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentStatus: 'pending_verification' }),
+      });
+
+      if (!res.ok) throw new Error('Failed to update order');
+
+      clearCart();
+      router.push(`/order-confirmation?orderId=${createdOrder.id}`);
+    } catch (err) {
+      console.error('Error updating order:', err);
+      alert('Something went wrong. Please try again.');
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  if (showQRModal && createdOrder && settings) {
+    return (
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'rgba(0,0,0,0.8)',
+        zIndex: 1000,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px'
+      }}>
+        <div style={{
+          background: 'white',
+          borderRadius: '16px',
+          padding: '2rem',
+          maxWidth: '500px',
+          width: '100%',
+          maxHeight: '90vh',
+          overflowY: 'auto'
+        }}>
+          <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+            <h2 style={{ color: 'var(--primary-color)', marginBottom: '0.5rem' }}>Complete Your Payment</h2>
+            <p style={{ color: '#666' }}>Order #{createdOrder.orderNumber}</p>
+            <div style={{ fontSize: '2rem', fontWeight: 'bold', margin: '1rem 0' }}>
+              {formatPrice(createdOrder.total)}
+            </div>
+          </div>
+
+          <div style={{ 
+            background: '#f9f9f9', 
+            padding: '1.5rem', 
+            borderRadius: '12px',
+            marginBottom: '1.5rem',
+            textAlign: 'center'
+          }}>
+            {settings.paymentQRCode ? (
+              <img 
+                src={settings.paymentQRCode} 
+                alt="Payment QR Code" 
+                style={{ maxWidth: '100%', borderRadius: '8px', marginBottom: '1rem' }} 
+              />
+            ) : (
+              <div style={{ padding: '2rem', background: '#eee', borderRadius: '8px', marginBottom: '1rem' }}>
+                QR Code not configured
+              </div>
+            )}
+            
+            {settings.upiId && (
+              <div style={{ 
+                background: 'white', 
+                padding: '10px', 
+                borderRadius: '8px', 
+                border: '1px dashed #ccc',
+                display: 'inline-block',
+                fontWeight: '600'
+              }}>
+                UPI: {settings.upiId}
+              </div>
+            )}
+            
+            {settings.paymentInstructions && (
+              <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#555' }}>
+                {settings.paymentInstructions}
+              </p>
+            )}
+          </div>
+
+          <button
+            onClick={handlePaymentConfirmation}
+            disabled={processing}
+            className="cta-button"
+            style={{ width: '100%', fontSize: '1.1rem', marginBottom: '1rem' }}
+          >
+            {processing ? 'Processing...' : 'I Have Paid'}
+          </button>
+          
+          <button
+            onClick={() => setShowQRModal(false)}
+            style={{ 
+              width: '100%', 
+              padding: '12px', 
+              background: 'transparent', 
+              border: 'none', 
+              color: '#666',
+              cursor: 'pointer' 
+            }}
+          >
+            Cancel / Pay Later
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ paddingTop: '120px', paddingBottom: '80px', minHeight: '100vh', background: '#f9f9f9' }}>
       <div className="container">
         <h1 className="section-title">Checkout</h1>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '3rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
             {/* Checkout Form */}
-            <div>
+            <div style={{ gridColumn: 'span 2' }}>
               {/* Contact Information */}
               <div style={{ background: 'white', padding: '2rem', borderRadius: '12px', marginBottom: '2rem', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
                 <h3 style={{ fontSize: '1.3rem', marginBottom: '1.5rem' }}>Contact Information</h3>
@@ -230,7 +361,7 @@ export default function CheckoutPage() {
             </div>
 
             {/* Order Summary */}
-            <div>
+            <div style={{ gridColumn: 'span 1' }}>
               <div style={{ background: 'white', padding: '2rem', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)', position: 'sticky', top: '120px' }}>
                 <h3 style={{ fontSize: '1.3rem', marginBottom: '1.5rem' }}>Order Summary</h3>
 
@@ -281,12 +412,12 @@ export default function CheckoutPage() {
                     cursor: processing ? 'wait' : 'pointer',
                   }}
                 >
-                  {processing ? 'Processing...' : 'Place Order'}
+                  {processing ? 'Processing...' : 'Place Order & Pay'}
                 </button>
 
                 <div style={{ marginTop: '1rem', fontSize: '0.85rem', color: '#666', textAlign: 'center' }}>
                   <i className="fas fa-lock" style={{ marginRight: '6px' }}></i>
-                  Secure checkout
+                  Secure Payment via UPI
                 </div>
               </div>
             </div>

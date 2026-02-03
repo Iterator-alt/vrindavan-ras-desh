@@ -79,6 +79,14 @@ export async function POST(request: Request) {
             },
         });
 
+        // Send confirmation email
+        try {
+            const { sendOrderReceivedEmail } = await import('@/lib/email');
+            await sendOrderReceivedEmail(order);
+        } catch (emailError) {
+            console.error('Failed to send order email:', emailError);
+        }
+
         return NextResponse.json(order, { status: 201 });
     } catch (error) {
         console.error('Error creating order:', error);

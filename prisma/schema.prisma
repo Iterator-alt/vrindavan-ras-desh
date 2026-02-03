@@ -58,7 +58,12 @@ model SiteSettings {
   instagramPost2 String?
   instagramPost3 String?
   facebookUrl    String?
+  // Payment QR Code Settings
+  paymentQRCode  String?   // URL to uploaded QR code image
+  upiId          String?   // UPI ID for display (optional)
+  paymentInstructions String? // Custom payment instructions
 }
+
 
 model Event {
   id          String   @id @default(cuid())
