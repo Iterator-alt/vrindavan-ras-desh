@@ -26,10 +26,8 @@ export default function Navbar() {
                     
                     {/* Donate Button */}
                     <li>
-                        <a 
-                          href="https://rzp.io/l/donate-placeholder" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
+                        <Link 
+                          href="/donate" 
                           className="cta-button"
                           style={{ 
                             padding: '8px 20px', 
@@ -41,8 +39,9 @@ export default function Navbar() {
                           onClick={() => setIsOpen(false)}
                         >
                           Donate
-                        </a>
+                        </Link>
                     </li>
+
 
                     {session ? (
                         <li><Link href="/admin" onClick={() => setIsOpen(false)} style={{ color: 'var(--primary-color)', fontWeight: 'bold' }}>Admin</Link></li>

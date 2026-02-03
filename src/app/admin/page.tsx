@@ -57,6 +57,13 @@ export default async function AdminDashboard() {
             <Link href="/admin/events" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>Manage Events</Link>
           </div>
 
+          {/* Donation Settings */}
+          <div style={{ border: '1px solid #eee', padding: '1.5rem', borderRadius: '8px' }}>
+            <h3><i className="fas fa-hand-holding-heart" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Donation Settings</h3>
+            <p style={{ marginBottom: '1rem', color: '#666' }}>Manage donation page and seva options.</p>
+            <Link href="/admin/donation-settings" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>Manage Donations</Link>
+          </div>
+
           {/* User Management (Superadmin Only) */}
           {session.user?.role === 'SUPERADMIN' && (
             <div style={{ border: '1px solid #eee', padding: '1.5rem', borderRadius: '8px' }}>

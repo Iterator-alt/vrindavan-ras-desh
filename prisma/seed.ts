@@ -38,6 +38,61 @@ async function main() {
     }
 
     console.log('Seeded categories:', categories.length)
+
+    // Seed default donation settings
+    const defaultSewaOptions = [
+        {
+            id: 'pangat-500',
+            title: 'Pangat Sewa',
+            description: 'Feed prasadam to 500 devotees',
+            amount: 5000,
+            icon: '🍽️',
+            image: '',
+            isActive: true
+        },
+        {
+            id: 'dress-sewa',
+            title: 'Dress Sewa',
+            description: 'Offer a beautiful dress to Radha Vallabh Lal',
+            amount: 2100,
+            icon: '👗',
+            image: '',
+            isActive: true
+        },
+        {
+            id: 'bhog-sewa',
+            title: 'Bhog Sewa',
+            description: 'Offer special bhog to the divine couple',
+            amount: 1100,
+            icon: '🌺',
+            image: '',
+            isActive: true
+        },
+        {
+            id: 'temple-maintenance',
+            title: 'Temple Maintenance',
+            description: 'Support daily temple upkeep and maintenance',
+            amount: 3000,
+            icon: '🏛️',
+            image: '',
+            isActive: true
+        }
+    ]
+
+    await prisma.donationSettings.upsert({
+        where: { id: 'default' },
+        update: {},
+        create: {
+            id: 'default',
+            pageTitle: 'Support Our Seva',
+            pageSubtitle: 'Contribute to the divine service of Radha Vallabh Lal',
+            pageDescription: 'Your generous contribution helps us serve thousands of devotees and maintain the sacred temple.',
+            sewaOptions: defaultSewaOptions,
+            isEnabled: true
+        }
+    })
+
+    console.log('Seeded donation settings with', defaultSewaOptions.length, 'seva options')
 }
 
 main()

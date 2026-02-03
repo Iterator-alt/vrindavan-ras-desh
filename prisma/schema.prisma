@@ -73,6 +73,20 @@ model Event {
   updatedAt   DateTime @updatedAt
 }
 
+// Donation/Seva Settings
+model DonationSettings {
+  id                String   @id @default("default")
+  donationPageUrl   String?  // External domain URL for production redirect
+  sewaOptions       Json     @default("[]") // Array of seva boxes
+  pageTitle         String   @default("Support Our Seva")
+  pageSubtitle      String   @default("Contribute to the divine service")
+  pageDescription   String?
+  heroImage         String?
+  isEnabled         Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
 // E-Commerce Models
 
 model Category {
