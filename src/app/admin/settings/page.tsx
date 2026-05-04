@@ -48,6 +48,10 @@ export default function SettingsPage() {
     paymentQRCode: '',
     upiId: '',
     paymentInstructions: '',
+    liveDarshanUrl: '',
+    liveDarshanActive: false,
+    address: '',
+    mapEmbedUrl: '',
   });
 
   useEffect(() => {
@@ -484,6 +488,69 @@ export default function SettingsPage() {
               <span style={{ fontSize: '12px', color: '#888', marginTop: '5px' }}>Upload QR Code</span>
             </div>
           )}
+        </div>
+
+        {/* Live Darshan Settings */}
+        <h3 style={{ borderBottom: '1px solid #eee', paddingBottom: '10px', marginBottom: '20px', marginTop: '40px' }}>Live Darshan</h3>
+
+        <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
+            <input
+              type="checkbox"
+              checked={(formData as any).liveDarshanActive || false}
+              onChange={(e) => setFormData(prev => ({ ...prev, liveDarshanActive: e.target.checked }))}
+              style={{ width: '20px', height: '20px' }}
+            />
+            <span style={{ fontWeight: 'bold' }}>Enable Live Darshan</span>
+          </label>
+          <p style={{ fontSize: '0.85rem', color: '#666', marginTop: '5px', marginLeft: '30px' }}>
+            When enabled, live stream will be shown prominently on homepage
+          </p>
+        </div>
+
+        <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>YouTube Live Stream URL</label>
+          <input
+            type="text"
+            name="liveDarshanUrl"
+            value={(formData as any).liveDarshanUrl || ''}
+            onChange={handleChange}
+            placeholder="https://www.youtube.com/embed/LIVE_STREAM_ID"
+            style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }}
+          />
+          <p style={{ fontSize: '0.85rem', color: '#666', marginTop: '5px' }}>
+            Use YouTube embed URL format. Get this from YouTube live stream share options.
+          </p>
+        </div>
+
+        {/* Address & Location Settings */}
+        <h3 style={{ borderBottom: '1px solid #eee', paddingBottom: '10px', marginBottom: '20px', marginTop: '40px' }}>Address & Location</h3>
+
+        <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Temple/Ashram Address</label>
+          <textarea
+            name="address"
+            value={(formData as any).address || ''}
+            onChange={handleChange}
+            placeholder="Full address including city, state, PIN code"
+            rows={3}
+            style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }}
+          />
+        </div>
+
+        <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Google Maps Embed URL</label>
+          <input
+            type="text"
+            name="mapEmbedUrl"
+            value={(formData as any).mapEmbedUrl || ''}
+            onChange={handleChange}
+            placeholder="https://www.google.com/maps/embed?pb=..."
+            style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }}
+          />
+          <p style={{ fontSize: '0.85rem', color: '#666', marginTop: '5px' }}>
+            Go to Google Maps → Share → Embed a map → Copy the src URL from the iframe
+          </p>
         </div>
 
         <button type="submit" className="cta-button" disabled={saving} style={{ width: '100%', border: 'none', cursor: saving ? 'wait' : 'pointer', marginTop: '20px' }}>

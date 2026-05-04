@@ -31,14 +31,53 @@ export default async function Home() {
   const video2 = settings?.videoUrl2 || 'https://www.youtube.com/embed/videoseries?list=PLU12uITxBEPGsXqgC-Vd5XnK-WqXnK-Wq';
   const video3 = settings?.videoUrl3 || 'https://www.youtube.com/embed/videoseries?list=PLU12uITxBEPGsXqgC-Vd5XnK-WqXnK-Wq';
 
+  const isLiveDarshanActive = settings?.liveDarshanActive && settings?.liveDarshanUrl;
+
   return (
     <main>
       {/* Hero Section with Carousel */}
-      <HeroCarousel 
+      <HeroCarousel
         images={heroImages}
         title="" // Removed
         subtitle="" // Removed
       />
+
+      {/* Live Darshan Section - Only shown when active */}
+      {isLiveDarshanActive && (
+        <section id="live-darshan" style={{ padding: '60px 0', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)' }}>
+          <div className="container">
+            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: '#ef4444', color: 'white', padding: '8px 20px', borderRadius: '30px', marginBottom: '1rem', animation: 'pulse 2s infinite' }}>
+                <span style={{ width: '10px', height: '10px', background: 'white', borderRadius: '50%', animation: 'blink 1s infinite' }}></span>
+                LIVE NOW
+              </div>
+              <h2 style={{ color: 'white', fontFamily: 'var(--heading-font)', fontSize: '2.5rem', marginBottom: '0.5rem' }}>Live Darshan</h2>
+              <p style={{ color: 'rgba(255,255,255,0.8)' }}>Experience the divine presence live from Vrindavan</p>
+            </div>
+            <div style={{ maxWidth: '900px', margin: '0 auto', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 20px 50px rgba(0,0,0,0.3)' }}>
+              <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
+                <iframe
+                  src={settings?.liveDarshanUrl || ''}
+                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
+                  title="Live Darshan"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            </div>
+            <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem' }}>
+              <i className="fas fa-info-circle" style={{ marginRight: '5px' }}></i>
+              If the stream is offline, please check back during aarti timings
+            </p>
+          </div>
+          <style>{`
+            @keyframes blink {
+              0%, 100% { opacity: 1; }
+              50% { opacity: 0.3; }
+            }
+          `}</style>
+        </section>
+      )}
 
       {/* Upcoming Events Section */}
       <section id="events" style={{ padding: '80px 0', background: '#fff' }}>

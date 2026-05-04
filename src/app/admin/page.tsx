@@ -22,16 +22,58 @@ export default async function AdminDashboard() {
         </p>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
+          {/* Gallery Management */}
+          <div style={{ border: '1px solid #eee', padding: '1.5rem', borderRadius: '8px' }}>
+            <h3><i className="fas fa-images" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Gallery</h3>
+            <p style={{ marginBottom: '1rem', color: '#666' }}>Manage photo gallery images.</p>
+            <Link href="/admin/gallery" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>Manage Gallery</Link>
+          </div>
+
+          {/* Videos Management */}
+          <div style={{ border: '1px solid #eee', padding: '1.5rem', borderRadius: '8px' }}>
+            <h3><i className="fas fa-video" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Videos</h3>
+            <p style={{ marginBottom: '1rem', color: '#666' }}>Manage YouTube videos.</p>
+            <Link href="/admin/videos" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>Manage Videos</Link>
+          </div>
+
+          {/* Schedule Management */}
+          <div style={{ border: '1px solid #eee', padding: '1.5rem', borderRadius: '8px' }}>
+            <h3><i className="fas fa-clock" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Schedule</h3>
+            <p style={{ marginBottom: '1rem', color: '#666' }}>Manage aarti and darshan timings.</p>
+            <Link href="/admin/schedule" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>Manage Schedule</Link>
+          </div>
+
+          {/* Donations */}
+          <div style={{ border: '1px solid #eee', padding: '1.5rem', borderRadius: '8px' }}>
+            <h3><i className="fas fa-rupee-sign" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Donations</h3>
+            <p style={{ marginBottom: '1rem', color: '#666' }}>View and verify donations.</p>
+            <Link href="/admin/donations" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>View Donations</Link>
+          </div>
+
           {/* Product Management */}
           <div style={{ border: '1px solid #eee', padding: '1.5rem', borderRadius: '8px' }}>
-            <h3><i className="fas fa-shopping-bag" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Product Management</h3>
+            <h3><i className="fas fa-shopping-bag" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Products</h3>
             <p style={{ marginBottom: '1rem', color: '#666' }}>Manage store products and inventory.</p>
             <Link href="/admin/products" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>Manage Products</Link>
           </div>
 
+          {/* Order Management */}
+          <div style={{ border: '1px solid #eee', padding: '1.5rem', borderRadius: '8px' }}>
+            <h3><i className="fas fa-box" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Orders</h3>
+            <p style={{ marginBottom: '1rem', color: '#666' }}>View and manage customer orders.</p>
+            <Link href="/admin/orders" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>View Orders</Link>
+          </div>
+
+          {/* Event Management */}
+          <div style={{ border: '1px solid #eee', padding: '1.5rem', borderRadius: '8px' }}>
+            <h3><i className="fas fa-calendar-alt" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Events</h3>
+            <p style={{ marginBottom: '1rem', color: '#666' }}>Add and update upcoming events.</p>
+            <Link href="/admin/events" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>Manage Events</Link>
+          </div>
+
           {/* Blog Management */}
           <div style={{ border: '1px solid #eee', padding: '1.5rem', borderRadius: '8px' }}>
-            <h3><i className="fas fa-pen-fancy" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Blog Management</h3>
+            <h3><i className="fas fa-pen-fancy" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Blog</h3>
             <p style={{ marginBottom: '1rem', color: '#666' }}>Write and manage spiritual articles.</p>
             <Link href="/admin/blog/new" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>Write New Post</Link>
           </div>
@@ -39,29 +81,15 @@ export default async function AdminDashboard() {
           {/* Site Settings */}
           <div style={{ border: '1px solid #eee', padding: '1.5rem', borderRadius: '8px' }}>
             <h3><i className="fas fa-cog" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Site Settings</h3>
-            <p style={{ marginBottom: '1rem', color: '#666' }}>Update hero images, videos, and social links.</p>
+            <p style={{ marginBottom: '1rem', color: '#666' }}>Update hero, videos, social links & more.</p>
             <Link href="/admin/settings" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>Manage Settings</Link>
-          </div>
-
-          {/* Order Management */}
-          <div style={{ border: '1px solid #eee', padding: '1.5rem', borderRadius: '8px' }}>
-            <h3><i className="fas fa-box" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Order Management</h3>
-            <p style={{ marginBottom: '1rem', color: '#666' }}>View and manage customer orders.</p>
-            <Link href="/admin/orders" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>View Orders</Link>
-          </div>
-
-          {/* Event Management */}
-          <div style={{ border: '1px solid #eee', padding: '1.5rem', borderRadius: '8px' }}>
-            <h3><i className="fas fa-calendar-alt" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Event Management</h3>
-            <p style={{ marginBottom: '1rem', color: '#666' }}>Add and update upcoming events.</p>
-            <Link href="/admin/events" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>Manage Events</Link>
           </div>
 
           {/* Donation Settings */}
           <div style={{ border: '1px solid #eee', padding: '1.5rem', borderRadius: '8px' }}>
-            <h3><i className="fas fa-hand-holding-heart" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Donation Settings</h3>
-            <p style={{ marginBottom: '1rem', color: '#666' }}>Manage donation page and seva options.</p>
-            <Link href="/admin/donation-settings" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>Manage Donations</Link>
+            <h3><i className="fas fa-hand-holding-heart" style={{ marginRight: '10px', color: 'var(--primary-color)' }}></i>Seva Options</h3>
+            <p style={{ marginBottom: '1rem', color: '#666' }}>Manage seva/donation options.</p>
+            <Link href="/admin/donation-settings" className="cta-button" style={{ fontSize: '0.9rem', padding: '8px 20px' }}>Manage Seva</Link>
           </div>
 
           {/* User Management (Superadmin Only) */}

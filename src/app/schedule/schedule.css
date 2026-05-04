@@ -1,0 +1,392 @@
+.schedule-page {
+  min-height: 100vh;
+}
+
+/* Hero Section */
+.schedule-hero {
+  height: 45vh;
+  min-height: 350px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.schedule-hero .hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(139, 69, 19, 0.85) 0%, rgba(180, 83, 9, 0.8) 100%);
+}
+
+.schedule-hero .hero-content {
+  position: relative;
+  z-index: 1;
+  color: white;
+  padding: 0 20px;
+}
+
+.schedule-hero h1 {
+  font-family: var(--heading-font);
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.schedule-hero p {
+  font-size: 1.3rem;
+  opacity: 0.95;
+}
+
+/* Day Selector */
+.day-selector {
+  padding: 1.5rem 0;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 70px;
+  z-index: 10;
+  overflow-x: auto;
+}
+
+.day-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
+  min-width: max-content;
+  padding: 0 1rem;
+}
+
+.day-tab {
+  padding: 0.6rem 1.2rem;
+  border: 2px solid var(--primary-color);
+  background: transparent;
+  color: var(--primary-color);
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.day-tab:hover,
+.day-tab.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* Schedule Content */
+.schedule-content {
+  padding: 4rem 0;
+  background: #f9f9f9;
+  min-height: 50vh;
+}
+
+.schedule-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.category-section {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.category-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--heading-font);
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.category-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-icon i {
+  color: white;
+  font-size: 1.1rem;
+}
+
+/* Timeline */
+.schedule-timeline {
+  position: relative;
+  padding-left: 30px;
+}
+
+.schedule-timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #e0e0e0;
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 2rem;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -26px;
+  top: 5px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.timeline-content {
+  background: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.timeline-content:hover {
+  transform: translateX(10px);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.time-badge {
+  display: inline-block;
+  background: var(--primary-color);
+  color: white;
+  padding: 0.3rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+.timeline-content h3 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.timeline-content p {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.day-badge {
+  display: inline-block;
+  background: #e5e7eb;
+  color: #4b5563;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+  text-transform: capitalize;
+}
+
+/* Default Schedule */
+.default-schedule {
+  text-align: center;
+}
+
+.default-schedule h2 {
+  font-family: var(--heading-font);
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 2.5rem;
+}
+
+.timing-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.timing-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.timing-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+.timing-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+}
+
+.timing-icon i {
+  color: white;
+  font-size: 1.5rem;
+}
+
+.timing-card h3 {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.timing-card .timing {
+  color: var(--primary-color);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+/* Notes Section */
+.notes-section {
+  padding: 4rem 0;
+  background: #fff;
+}
+
+.notes-box {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  padding: 2rem;
+  border-radius: 15px;
+  border-left: 5px solid #f59e0b;
+}
+
+.notes-box h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.3rem;
+  color: #92400e;
+  margin-bottom: 1rem;
+}
+
+.notes-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notes-box li {
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  color: #78350f;
+  font-size: 0.95rem;
+}
+
+.notes-box li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #f59e0b;
+  font-weight: bold;
+}
+
+/* Loading & Empty States */
+.loading, .no-schedule {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #666;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.no-schedule i {
+  font-size: 4rem;
+  color: #ccc;
+  margin-bottom: 1rem;
+}
+
+.no-schedule p {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.no-schedule .sub-text {
+  font-size: 1rem;
+  color: #999;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .schedule-hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .day-selector {
+    padding: 1rem 0;
+  }
+
+  .day-tab {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .category-section {
+    padding: 1.5rem;
+  }
+
+  .category-title {
+    font-size: 1.2rem;
+  }
+
+  .timeline-content {
+    padding: 1rem;
+  }
+
+  .timing-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .timing-card {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .timing-cards {
+    grid-template-columns: 1fr;
+  }
+}

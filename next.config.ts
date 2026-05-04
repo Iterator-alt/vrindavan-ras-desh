@@ -14,9 +14,13 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'images.unsplash.com',
       },
+      {
+        protocol: 'https',
+        hostname: '**.blob.vercel-storage.com',
+      },
     ],
+    qualities: [50, 75, 90],
   },
 };
 
 export default nextConfig;
-// Force Vercel rebuild for rollback

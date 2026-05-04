@@ -62,6 +62,14 @@ model SiteSettings {
   paymentQRCode  String?   // URL to uploaded QR code image
   upiId          String?   // UPI ID for display (optional)
   paymentInstructions String? // Custom payment instructions
+
+  // Live Darshan Settings
+  liveDarshanUrl    String?   // YouTube live stream URL
+  liveDarshanActive Boolean   @default(false)
+
+  // Contact Page Settings
+  address           String?
+  mapEmbedUrl       String?   // Google Maps embed URL
 }
 
 
@@ -160,4 +168,74 @@ model OrderItem {
   quantity  Int
   price     Float   // Price at time of order
   total     Float
+}
+
+// Gallery for photos
+model GalleryImage {
+  id          String   @id @default(cuid())
+  title       String?
+  description String?
+  imageUrl    String
+  category    String   @default("general") // general, darshan, events, festivals
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Videos from YouTube
+model Video {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  youtubeUrl  String   // Full YouTube URL or embed URL
+  thumbnailUrl String?
+  category    String   @default("general") // bhajan, discourse, kirtan, darshan, festival
+  isActive    Boolean  @default(true)
+  isFeatured  Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Schedule/Aarti Timings
+model ScheduleItem {
+  id          String   @id @default(cuid())
+  title       String   // e.g., "Mangala Aarti"
+  description String?
+  time        String   // e.g., "4:30 AM"
+  day         String   @default("daily") // daily, monday, tuesday, etc., or special
+  category    String   @default("aarti") // aarti, darshan, bhog, special
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Donation Records
+model Donation {
+  id              String   @id @default(cuid())
+  donationNumber  String   @unique
+  donorName       String
+  donorPhone      String
+  donorEmail      String?
+  sevaTitle       String
+  sevaId          String?
+  amount          Float
+  transactionId   String?
+  paymentStatus   String   @default("pending") // pending, verified, failed
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Contact Form Submissions
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?
+  phone     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
 }
