@@ -3,6 +3,14 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 
+// Ensure NEXTAUTH_URL has a valid default for build time
+const getBaseUrl = () => {
+    if (process.env.NEXTAUTH_URL) return process.env.NEXTAUTH_URL
+    if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`
+    if (process.env.RAILWAY_PUBLIC_DOMAIN) return `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
+    return 'http://localhost:3000'
+}
+
 export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
