@@ -1,7 +1,8 @@
 import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 
-export const revalidate = 60;
+// Force dynamic rendering to avoid database calls during build
+export const dynamic = 'force-dynamic';
 
 export default async function BlogPost({ params }: { params: { slug: string } }) {
   const post = await prisma.post.findUnique({

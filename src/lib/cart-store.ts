@@ -80,14 +80,16 @@ export const useCartStore = create<CartStore>()(
         }),
         {
             name: 'cart-storage',
+            skipHydration: true,
             storage: createJSONStorage(() => {
-                if (typeof window !== 'undefined') {
+                if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
                     return localStorage;
                 }
+                // Return a no-op storage for SSR
                 return {
                     getItem: () => null,
-                    setItem: () => { },
-                    removeItem: () => { },
+                    setItem: () => {},
+                    removeItem: () => {},
                 };
             }),
         }

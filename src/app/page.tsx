@@ -3,7 +3,8 @@ import { prisma } from '@/lib/prisma';
 import HeroCarousel from '@/components/HeroCarousel';
 import InstagramEmbed from '@/components/InstagramEmbed';
 
-export const revalidate = 0; // Dynamic data
+// Force dynamic rendering to avoid database calls during build
+export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   const settings = await prisma.siteSettings.findUnique({

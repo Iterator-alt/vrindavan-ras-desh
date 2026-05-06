@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { formatPrice, calculateDiscount } from '@/lib/shop-utils';
 
-export const revalidate = 60; // Revalidate every minute
+// Force dynamic rendering to avoid database calls during build
+export const dynamic = 'force-dynamic';
 
 interface SearchParams {
   category?: string;

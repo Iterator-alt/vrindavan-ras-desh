@@ -5,9 +5,6 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   env: {
     // Provide default for build time if not set
     NEXTAUTH_URL: process.env.NEXTAUTH_URL

@@ -4,7 +4,8 @@ import { prisma } from '@/lib/prisma';
 import { formatPrice, calculateDiscount } from '@/lib/shop-utils';
 import AddToCartButton from '@/components/AddToCartButton';
 
-export const revalidate = 60;
+// Force dynamic rendering to avoid database calls during build
+export const dynamic = 'force-dynamic';
 
 export default async function ProductPage({
   params,
