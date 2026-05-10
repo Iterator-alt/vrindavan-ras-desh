@@ -3,12 +3,29 @@ import { notFound } from 'next/navigation';
 
 // Force dynamic rendering to avoid database calls during build
 export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;
 
-export default async function BlogPost({ params }: { params: { slug: string } }) {
-  const post = await prisma.post.findUnique({
-    where: { slug: params.slug },
-    include: { author: { select: { name: true } } },
-  });
+async function getPost(slug: string) {
+  try {
+    return await prisma.post.findUnique({
+      where: { slug },
+      include: { author: { select: { name: true } } },
+    });
+  } catch (error) {
+    console.error('Failed to fetch post:', error);
+    return null;
+  }
+}
+
+// Prevent static generation - all pages will be rendered on-demand
+export function generateStaticParams() {
+  return [];
+}
+
+export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = await getPost(slug);
 
   if (!post) {
     notFound();

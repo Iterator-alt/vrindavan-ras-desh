@@ -5,17 +5,24 @@ import InstagramEmbed from '@/components/InstagramEmbed';
 
 // Force dynamic rendering to avoid database calls during build
 export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;
+
+async function getHomeData() {
+  try {
+    const [settings, events] = await Promise.all([
+      prisma.siteSettings.findUnique({ where: { id: 'default' } }),
+      prisma.event.findMany({ where: { isActive: true }, orderBy: { date: 'asc' }, take: 3 }),
+    ]);
+    return { settings, events };
+  } catch (error) {
+    console.error('Failed to fetch home data:', error);
+    return { settings: null, events: [] };
+  }
+}
 
 export default async function Home() {
-  const settings = await prisma.siteSettings.findUnique({
-    where: { id: 'default' },
-  });
-
-  const events = await prisma.event.findMany({
-    where: { isActive: true },
-    orderBy: { date: 'asc' },
-    take: 3,
-  });
+  const { settings, events } = await getHomeData();
 
   // Use new heroImages array if available, otherwise fall back to legacy fields
   let heroImages = settings?.heroImages || [];

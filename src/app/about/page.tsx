@@ -3,11 +3,20 @@ import HeroCarousel from '@/components/HeroCarousel';
 
 // Force dynamic rendering to avoid database calls during build
 export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;
+
+async function getSettings() {
+  try {
+    return await prisma.siteSettings.findUnique({ where: { id: 'default' } });
+  } catch (error) {
+    console.error('Failed to fetch settings:', error);
+    return null;
+  }
+}
 
 export default async function AboutPage() {
-  const settings = await prisma.siteSettings.findUnique({
-    where: { id: 'default' },
-  });
+  const settings = await getSettings();
 
   const aboutImages = settings?.aboutImages || [];
 

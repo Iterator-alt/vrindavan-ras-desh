@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 
 interface CartItem {
     id: string;
@@ -19,6 +19,13 @@ interface CartStore {
     getTotalItems: () => number;
     getTotalPrice: () => number;
 }
+
+// SSR-safe storage that only accesses localStorage on the client
+const noopStorage: StateStorage = {
+    getItem: () => null,
+    setItem: () => {},
+    removeItem: () => {},
+};
 
 export const useCartStore = create<CartStore>()(
     persist(
@@ -82,15 +89,11 @@ export const useCartStore = create<CartStore>()(
             name: 'cart-storage',
             skipHydration: true,
             storage: createJSONStorage(() => {
-                if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
-                    return localStorage;
+                // This runs during module initialization, so check for window
+                if (typeof window === 'undefined') {
+                    return noopStorage;
                 }
-                // Return a no-op storage for SSR
-                return {
-                    getItem: () => null,
-                    setItem: () => {},
-                    removeItem: () => {},
-                };
+                return localStorage;
             }),
         }
     )

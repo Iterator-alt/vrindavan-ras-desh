@@ -6,6 +6,25 @@ import AddToCartButton from '@/components/AddToCartButton';
 
 // Force dynamic rendering to avoid database calls during build
 export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;
+
+async function getProduct(slug: string) {
+  try {
+    return await prisma.product.findUnique({
+      where: { slug },
+      include: { category: true },
+    });
+  } catch (error) {
+    console.error('Failed to fetch product:', error);
+    return null;
+  }
+}
+
+// Prevent static generation - all pages will be rendered on-demand
+export function generateStaticParams() {
+  return [];
+}
 
 export default async function ProductPage({
   params,
@@ -13,12 +32,7 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = await prisma.product.findUnique({
-    where: { slug },
-    include: {
-      category: true,
-    },
-  });
+  const product = await getProduct(slug);
 
   if (!product || !product.isActive) {
     notFound();

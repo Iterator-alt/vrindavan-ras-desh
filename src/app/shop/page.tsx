@@ -4,9 +4,31 @@ import { formatPrice, calculateDiscount } from '@/lib/shop-utils';
 
 // Force dynamic rendering to avoid database calls during build
 export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;
 
 interface SearchParams {
   category?: string;
+}
+
+async function getShopData(categorySlug?: string) {
+  try {
+    const [categories, products] = await Promise.all([
+      prisma.category.findMany({ orderBy: { name: 'asc' } }),
+      prisma.product.findMany({
+        where: {
+          isActive: true,
+          ...(categorySlug && { category: { slug: categorySlug } }),
+        },
+        include: { category: true },
+        orderBy: { createdAt: 'desc' },
+      }),
+    ]);
+    return { categories, products };
+  } catch (error) {
+    console.error('Failed to fetch shop data:', error);
+    return { categories: [], products: [] };
+  }
 }
 
 export default async function ShopPage({
@@ -15,29 +37,7 @@ export default async function ShopPage({
   searchParams: Promise<SearchParams>;
 }) {
   const { category: categorySlug } = await searchParams;
-
-  // Fetch categories
-  const categories = await prisma.category.findMany({
-    orderBy: { name: 'asc' },
-  });
-
-  // Fetch products
-  const products = await prisma.product.findMany({
-    where: {
-      isActive: true,
-      ...(categorySlug && {
-        category: {
-          slug: categorySlug,
-        },
-      }),
-    },
-    include: {
-      category: true,
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
+  const { categories, products } = await getShopData(categorySlug);
 
   const selectedCategory = categorySlug
     ? categories.find((c) => c.slug === categorySlug)

@@ -3,13 +3,24 @@ import Link from 'next/link';
 
 // Force dynamic rendering to avoid database calls during build
 export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;
+
+async function getPosts() {
+  try {
+    return await prisma.post.findMany({
+      where: { published: true },
+      include: { author: { select: { name: true } } },
+      orderBy: { createdAt: 'desc' },
+    });
+  } catch (error) {
+    console.error('Failed to fetch posts:', error);
+    return [];
+  }
+}
 
 export default async function BlogPage() {
-  const posts = await prisma.post.findMany({
-    where: { published: true },
-    include: { author: { select: { name: true } } },
-    orderBy: { createdAt: 'desc' },
-  });
+  const posts = await getPosts();
 
   return (
     <div className="container" style={{ paddingTop: '120px', paddingBottom: '80px' }}>
